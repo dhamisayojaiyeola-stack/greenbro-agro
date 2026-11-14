@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Package | GREENBRO AGRO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="package-page">
+
+    <div class="package-layout">
+
+        <aside class="dashboard-sidebar">
+            <h2>GREENBRO <span>AGRO</span></h2>
+            <nav>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="orders.html">My Orders</a>
+                <a href="contributions.html">My Contributions</a>
+                <a href="shop.html">Shop Foodstuffs</a>
+                <a href="dashboard.html">My Profile</a>
+                <a href="dashboard.html">Settings</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="package-main">
+
+            <header class="package-header">
+                <p>GREENBRO AGRO / CUSTOM PACKAGE</p>
+                <h1>Build Your Own Package</h1>
+                <p>Select the foodstuffs you want and create your own package.</p>
+            </header>
+
+            <section class="package-instructions">
+                <h3>Build your package your way!</h3>
+                <p>Choose a foodstuff from the list below, select your preferred options and add it to your package. You can add as many items as you need.</p>
+            </section>
+
+            <section class="food-picker">
+
+                <label for="foodSelector">SELECT FOODSTUFF</label>
+
+                <select id="foodSelector" onchange="showFoodOptions()">
+                    <option value="">Choose a foodstuff...</option>
+                    <option value="rice">Rice</option>
+                    <option value="beans">Beans</option>
+                    <option value="spaghetti">Spaghetti</option>
+                    <option value="garri">Garri</option>
+                    <option value="oil">Cooking Oil</option>
+                    <option value="tomato">Tomato Paste</option>
+                    <option value="yam">Yam</option>
+                    <option value="potatoes">Potatoes</option>
+                    <option value="semovita">Semovita / Semolina</option>
+                    <option value="flour">Flour</option>
+                    <option value="sugar">Sugar</option>
+                    <option value="salt">Salt</option>
+                    <option value="seasoning">Seasoning</option>
+                    <option value="beef">Beef</option>
+                    <option value="chicken">Chicken</option>
+                    <option value="turkey">Turkey</option>
+                    <option value="fish">Fish</option>
+                    <option value="seafood">Other Seafood</option>
+                </select>
+
+            </section>
+
+            <section id="foodOptions" class="food-options" hidden>
+                <h2 id="selectedFoodTitle"></h2>
+
+                <div id="foodFields" class="food-fields"></div>
+
+                <button type="button" id="addFoodButton" onclick="addFoodToPackage()">
+                    + Add to My Package
+                </button>
+            </section>
+
+            <section class="selected-package">
+
+                <div class="selected-package-heading">
+                    <h2>My Selected Foodstuffs</h2>
+                    <span id="itemCount">0 items</span>
+                </div>
+
+                <div id="selectedItems">
+                    <p class="empty-package">
+                        Your selected foodstuffs will appear here.
+                    </p>
+                </div>
+
+                <div class="package-total">
+                    <span>Estimated Package Total</span>
+                    <h2>Price will be calculated after items are priced.</h2>
+                </div>
+
+                <button type="button" class="package-submit-button">
+                    Continue
+                </button>
+
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script>
+        const foodConfigurations = {
+            rice: {
+                title: "Rice",
+                fields: [
+                    {
+                        label: "Rice Type",
+                        name: "type",
+                        options: ["Long Grain", "Ofada Rice", "Local Rice", "Foreign Rice", "Parboiled Rice"]
+                    },
+                    {
+                        label: "Brand",
+                        name: "brand",
+                        options: ["Big Bull", "Mama Gold", "Royal Stallion", "Caprice", "Other"]
+                    },
+                    {
+                        label: "Size",
+                        name: "size",
+                        options: ["1kg", "2kg", "5kg", "10kg", "25kg", "50kg"]
+                    }
+                ]
+            },
+
+            beans: {
+                title: "Beans",
+                fields: [
+                    {
+                        label: "Beans Type",
+                        name: "type",
+                        options: ["Oloyin Beans", "White Beans", "Brown Beans", "Black-eyed Beans"]
+                    },
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["1kg", "2kg", "5kg", "10kg", "25kg", "50kg"]
+                    }
+                ]
+            },
+
+            spaghetti: {
+                title: "Spaghetti",
+                fields: [
+                    {
+                        label: "Brand",
+                        name: "brand",
+                        options: ["Golden Penny", "Dangote", "Other"]
+                    },
+                    {
+                        label: "Type",
+                        name: "type",
+                        options: ["Regular Spaghetti", "Spaghettini", "Other"]
+                    },
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["500g", "1kg", "Carton"]
+                    }
+                ]
+            },
+
+            garri: {
+                title: "Garri",
+                fields: [
+                    {
+                        label: "Garri Type",
+                        name: "type",
+                        options: ["White Garri", "Yellow Garri"]
+                    },
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["1kg", "2kg", "5kg", "10kg", "25kg"]
+                    }
+                ]
+            },
+
+            oil: {
+                title: "Cooking Oil",
+                fields: [
+                    {
+                        label: "Oil Type",
+                        name: "type",
+                        options: ["Vegetable Oil", "Palm Oil"]
+                    },
+                    {
+                        label: "Brand",
+                        name: "brand",
+                        options: ["Other / To be updated"]
+                    },
+                    {
+                        label: "Quantity (Litres)",
+                        name: "quantity",
+                        options: ["5 Litres", "10 Litres", "15 Litres", "20 Litres", "25 Litres", "30 Litres"]
+                    }
+                ]
+            },
+
+            tomato: {
+                title: "Tomato Paste",
+                fields: [
+                    {
+                        label: "Packaging",
+                        name: "packaging",
+                        options: ["Sachet", "Small Tin", "Large Tin", "Carton"]
+                    }
+                ]
+            },
+
+            yam: {
+                title: "Yam",
+                fields: [
+                    {
+                        label: "Yam Type",
+                        name: "type",
+                        options: ["White Yam", "Yellow Yam"]
+                    }
+                ],
+                tubers: true
+            },
+
+            potatoes: {
+                title: "Potatoes",
+                fields: [
+                    {
+                        label: "Potato Type",
+                        name: "type",
+                        options: ["Irish Potatoes", "Sweet Potatoes"]
+                    },
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["1kg", "2kg", "5kg", "10kg"]
+                    }
+                ]
+            },
+
+            semovita: {
+                title: "Semovita / Semolina",
+                fields: [
+                    {
+                        label: "Product",
+                        name: "type",
+                        options: ["Semovita", "Semolina"]
+                    },
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["1kg", "2kg", "5kg", "10kg"]
+                    }
+                ]
+            },
+
+            flour: {
+                title: "Flour",
+                fields: [
+                    {
+                        label: "Flour Type",
+                        name: "type",
+                        options: ["Wheat Flour", "Other Flour"]
+                    },
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["1kg", "2kg", "5kg", "10kg"]
+                    }
+                ]
+            },
+
+            sugar: {
+                title: "Sugar",
+                fields: [
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["500g", "1kg", "2kg", "5kg"]
+                    }
+                ]
+            },
+
+            salt: {
+                title: "Salt",
+                fields: [
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["Small Pack", "1kg", "2kg", "5kg"]
+                    }
+                ]
+            },
+
+            seasoning: {
+                title: "Seasoning",
+                fields: [
+                    {
+                        label: "Seasoning Type",
+                        name: "type",
+                        options: ["Maggi", "Knorr", "Other"]
+                    },
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["Small Pack", "Medium Pack", "Large Pack", "Carton"]
+                    }
+                ]
+            },
+
+            beef: {
+                title: "Beef",
+                fields: [
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["1kg", "2kg", "5kg"]
+                    }
+                ]
+            },
+
+            chicken: {
+                title: "Chicken",
+                fields: [
+                    {
+                        label: "Chicken Type",
+                        name: "type",
+                        options: ["Whole Chicken", "Chicken Parts"]
+                    },
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["1kg", "2kg", "5kg", "Whole"]
+                    }
+                ]
+            },
+
+            turkey: {
+                title: "Turkey",
+                fields: [
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["1kg", "2kg", "5kg"]
+                    }
+                ]
+            },
+
+            fish: {
+                title: "Fish",
+                fields: [
+                    {
+                        label: "Fish Type",
+                        name: "type",
+                        options: ["Fresh Fish", "Smoked Fish", "Frozen Fish", "Stockfish"]
+                    },
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["500g", "1kg", "2kg", "5kg"]
+                    }
+                ]
+            },
+
+            seafood: {
+                title: "Other Seafood",
+                fields: [
+                    {
+                        label: "Seafood Type",
+                        name: "type",
+                        options: ["Prawns", "Crayfish", "Periwinkle", "Other"]
+                    },
+                    {
+                        label: "Quantity",
+                        name: "quantity",
+                        options: ["250g", "500g", "1kg", "2kg"]
+                    }
+                ]
+            }
+        };
+
+        let selectedFoodItems = [];
+
+        function showFoodOptions() {
+            const foodKey = document.getElementById("foodSelector").value;
+            const optionsBox = document.getElementById("foodOptions");
+            const fieldsBox = document.getElementById("foodFields");
+
+            fieldsBox.innerHTML = "";
+
+            if (!foodKey) {
+                optionsBox.hidden = true;
+                return;
+            }
+
+            const food = foodConfigurations[foodKey];
+
+            document.getElementById("selectedFoodTitle").textContent = food.title;
+
+            food.fields.forEach(field => {
+                const wrapper = document.createElement("div");
+                wrapper.className = "food-field";
+
+                const label = document.createElement("label");
+                label.textContent = field.label;
+
+                const select = document.createElement("select");
+                select.dataset.field = field.name;
+
+                const placeholder = document.createElement("option");
+                placeholder.value = "";
+                placeholder.textContent = "Choose " + field.label.toLowerCase();
+                select.appendChild(placeholder);
+
+                field.options.forEach(option => {
+                    const optionElement = document.createElement("option");
+                    optionElement.value = option;
+                    optionElement.textContent = option;
+                    select.appendChild(optionElement);
+                });
+
+                wrapper.appendChild(label);
+                wrapper.appendChild(select);
+                fieldsBox.appendChild(wrapper);
+            });
+
+            if (food.tubers) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "food-field";
+
+                const label = document.createElement("label");
+                label.textContent = "Number of Tubers";
+
+                const quantity = document.createElement("input");
+                quantity.type = "number";
+                quantity.min = "1";
+                quantity.step = "1";
+                quantity.value = "1";
+                quantity.dataset.field = "quantity";
+
+                wrapper.appendChild(label);
+                wrapper.appendChild(quantity);
+                fieldsBox.appendChild(wrapper);
+            }
+
+            optionsBox.hidden = false;
+        }
+
+        function addFoodToPackage() {
+            const foodKey = document.getElementById("foodSelector").value;
+            const food = foodConfigurations[foodKey];
+
+            if (!food) return;
+
+            const fields = document.querySelectorAll("#foodFields select, #foodFields input");
+            const details = {};
+
+            for (const field of fields) {
+                if (!field.value) {
+                    alert("Please complete all the options for " + food.title + ".");
+                    return;
+                }
+
+                if (field.dataset.field === "quantity" && Number(field.value) < 1) {
+                    alert("Please enter a valid quantity.");
+                    return;
+                }
+
+                details[field.dataset.field] = field.value;
+            }
+
+            selectedFoodItems.push({
+                name: food.title,
+                details: details
+            });
+
+            renderSelectedItems();
+
+            document.getElementById("foodSelector").value = "";
+            document.getElementById("foodOptions").hidden = true;
+        }
+
+        function renderSelectedItems() {
+            const container = document.getElementById("selectedItems");
+            const count = document.getElementById("itemCount");
+
+            container.innerHTML = "";
+
+            count.textContent = selectedFoodItems.length +
+                (selectedFoodItems.length === 1 ? " item" : " items");
+
+            if (selectedFoodItems.length === 0) {
+                container.innerHTML = '<p class="empty-package">Your selected foodstuffs will appear here.</p>';
+                return;
+            }
+
+            selectedFoodItems.forEach((item, index) => {
+                const card = document.createElement("div");
+                card.className = "selected-food-item";
+
+                const heading = document.createElement("h3");
+                heading.textContent = item.name;
+
+                const details = document.createElement("p");
+                details.textContent = Object.values(item.details).join(" • ");
+
+                const removeButton = document.createElement("button");
+                removeButton.type = "button";
+                removeButton.textContent = "Remove";
+                removeButton.onclick = function () {
+                    selectedFoodItems.splice(index, 1);
+                    renderSelectedItems();
+                };
+
+                card.appendChild(heading);
+                card.appendChild(details);
+                card.appendChild(removeButton);
+
+                container.appendChild(card);
+            });
+        }
+
+        function logout() {
+            localStorage.removeItem("greenbroToken");
+            localStorage.removeItem("greenbroUser");
+            window.location.href = "login.html";
+        }
+    </script>
+
+</body>
+</html>

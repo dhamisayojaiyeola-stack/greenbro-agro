@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | GREENBRO AGRO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        <a href="index.html">
+            <img src="image/logo.png" alt="GREENBRO AGRO Logo">
+        </a>
+    </div>
+
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="categories.html">Categories</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+        <a href="login.html" class="login-btn">Login</a>
+
+        <a href="cart.html" class="cart-btn">
+            Cart (<span id="cart-count">0</span>)
+        </a>
+    </div>
+
+</header>
+
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <h1>Welcome Back!</h1>
+            <p>Login to your GREENBRO AGRO account.</p>
+
+            <form id="loginForm">
+
+                <label for="login">Email or Phone Number</label>
+                <input
+                    type="text"
+                    id="login"
+                    placeholder="Enter your email or phone number"
+                    required
+                >
+
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+                <button type="submit" id="loginButton">
+                    Login
+                </button>
+
+                <p id="loginMessage"></p>
+
+            </form>
+
+            <p class="auth-switch">
+                Don't have an account?
+                <a href="register.html">Create an account</a>
+            </p>
+        </div>
+    </main>
+
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const loginMessage = document.getElementById("loginMessage");
+        const loginButton = document.getElementById("loginButton");
+
+        loginForm.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const login = document.getElementById("login").value.trim();
+            const password = document.getElementById("password").value;
+
+            loginButton.disabled = true;
+            loginButton.textContent = "Logging in...";
+            loginMessage.textContent = "";
+
+            try {
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        login: login,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || "Login failed.");
+                }
+
+                localStorage.setItem("greenbroToken", data.token);
+                localStorage.setItem("greenbroUser", JSON.stringify(data.user));
+
+                loginMessage.textContent = "Login successful! Redirecting...";
+loginMessage.style.color = "green";
+
+setTimeout(() => {
+    window.location.href = "dashboard.html";
+}, 1000);
+
+            } catch (error) {
+                loginMessage.textContent = error.message;
+                loginMessage.style.color = "red";
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = "Login";
+            }
+        });
+    </script>
+
+</body>
+</html>

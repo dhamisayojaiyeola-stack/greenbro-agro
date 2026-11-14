@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard | GREENBRO AGRO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="customer-dashboard">
+
+    <aside class="dashboard-sidebar">
+
+        <div class="dashboard-logo">
+            <a href="dashboard.html">
+                <img src="image/logo.png" alt="GREENBRO AGRO">
+            </a>
+        </div>
+
+        <div class="sidebar-menu">
+
+            <p class="menu-heading">MAIN MENU</p>
+
+            <a href="dashboard.html" class="sidebar-link active">
+                <span>⌂</span> Home
+            </a>
+
+            <a href="orders.html" class="sidebar-link">
+                <span>▣</span> My Orders
+            </a>
+
+            <a href="contributions.html" class="sidebar-link">
+                <span>◉</span> My Contributions
+            </a>
+
+            <a href="shop.html" class="sidebar-link">
+                <span>▤</span> List of Items
+            </a>
+
+            <p class="menu-heading account-heading">ACCOUNT</p>
+
+            <a href="profile.html" class="sidebar-link">
+                <span>♙</span> Me / My Profile
+            </a>
+
+            <a href="settings.html" class="sidebar-link">
+                <span>⚙</span> Settings
+            </a>
+
+        </div>
+
+        <button id="logoutButton" class="sidebar-logout">
+            ⇥ Logout
+        </button>
+
+    </aside>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-topbar">
+            <div>
+                <h2>Dashboard</h2>
+                <p>Welcome to your GREENBRO AGRO account.</p>
+            </div>
+
+            <div class="dashboard-user">
+                <span id="topCustomerName">Customer</span>
+            </div>
+        </header>
+
+        <section class="dashboard-welcome">
+            <h1>Hello, <span id="customerName">Customer</span>!</h1>
+            <p>Welcome back. What would you like to do today?</p>
+        </section>
+
+        <section class="dashboard-summary">
+
+            <div class="dashboard-card">
+                <h3>My Orders</h3>
+                <p>0</p>
+                <a href="orders.html">View Orders →</a>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Active Contributions</h3>
+                <p>0</p>
+                <a href="contributions.html">View Contributions →</a>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Total Contributions</h3>
+                <p>₦0.00</p>
+                <a href="contributions.html">Payment History →</a>
+            </div>
+
+        </section>
+
+        <section class="dashboard-section">
+
+            <h2>Quick Actions</h2>
+
+            <div class="dashboard-actions">
+
+                <a href="shop.html" class="dashboard-action">
+                    <h3>Shop Foodstuffs</h3>
+                    <p>Explore available food products.</p>
+                </a>
+
+                <a href="contributions.html" class="dashboard-action">
+                    <h3>Start a Contribution</h3>
+                    <p>Plan and gradually pay for your foodstuff package.</p>
+                </a>
+
+                <a href="orders.html" class="dashboard-action">
+                    <h3>Track My Orders</h3>
+                    <p>Check your purchases and delivery status.</p>
+                </a>
+
+                <a href="profile.html" class="dashboard-action">
+                    <h3>My Profile</h3>
+                    <p>Manage your personal information.</p>
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <nav class="mobile-dashboard-nav">
+        <a href="dashboard.html" class="mobile-nav-link active">
+            <span>⌂</span>
+            Home
+        </a>
+
+        <a href="orders.html" class="mobile-nav-link">
+            <span>▣</span>
+            Orders
+        </a>
+
+        <a href="contributions.html" class="mobile-nav-link">
+            <span>◉</span>
+            Contributions
+        </a>
+
+        <a href="shop.html" class="mobile-nav-link">
+            <span>▤</span>
+            Shop
+        </a>
+
+        <a href="profile.html" class="mobile-nav-link">
+            <span>♙</span>
+            Me
+        </a>
+    </nav>
+
+    <script>
+        const token = localStorage.getItem("greenbroToken");
+        const savedUser = localStorage.getItem("greenbroUser");
+
+        if (!token || !savedUser) {
+            window.location.href = "login.html";
+        } else {
+            const user = JSON.parse(savedUser);
+            const firstName = user.fullName.split(" ")[0];
+
+            document.getElementById("customerName").textContent = firstName;
+            document.getElementById("topCustomerName").textContent = firstName;
+        }
+
+        document.getElementById("logoutButton").addEventListener("click", function() {
+            localStorage.removeItem("greenbroToken");
+            localStorage.removeItem("greenbroUser");
+            window.location.href = "login.html";
+        });
+    </script>
+
+</body>
+</html>
