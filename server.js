@@ -2,6 +2,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const authRoutes = require("./routes/auth");
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 5000;
 // MIDDLEWARE
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // SERVE WEBSITE FILES
 app.use(express.static(__dirname));

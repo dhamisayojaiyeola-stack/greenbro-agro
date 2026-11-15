@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign-In | GREENBRO AGRO</title>
+</head>
+<body>
+    <h2>Completing your sign-in...</h2>
+
+    <script>
+        const params = new URLSearchParams(window.location.hash.substring(1));
+
+        const token = params.get("token");
+
+        if (token) {
+            localStorage.setItem("greenbroToken", token);
+            const payload = JSON.parse(
+    decodeURIComponent(
+        atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+            .split("")
+            .map(c => "%" + c.charCodeAt(0).toString(16).padStart(2, "0"))
+            .join("")
+    )
+);
+
+localStorage.setItem("greenbroUser", JSON.stringify({
+    id: payload.id,
+    fullName: payload.fullName,
+    email: payload.email,
+    phone: payload.phone || "",
+    role: payload.role
+}));
+
+            window.history.replaceState(
+                {},
+                document.title,
+                window.location.pathname
+            );
+
+            window.location.href = "dashboard.html";
+        } else {
+            document.body.innerHTML = `
+                <h2>Sign-in failed</h2>
+                <p>Please try signing in with Google again.</p>
+                <a href="login.html">Return to Login</a>
+            `;
+        }
+    </script>
+</body>
+</html>

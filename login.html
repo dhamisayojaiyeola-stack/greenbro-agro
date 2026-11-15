@@ -8,43 +8,43 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="auth-page">
 
-<header class="navbar">
+    <header class="auth-header">
 
-    <div class="logo">
-        <a href="index.html">
+        <a href="index.html" class="auth-logo">
             <img src="image/logo.png" alt="GREENBRO AGRO Logo">
         </a>
-    </div>
 
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="shop.html">Shop</a>
-        <a href="categories.html">Categories</a>
-        <a href="about.html">About Us</a>
-        <a href="contact.html">Contact</a>
-    </nav>
-
-    <div class="nav-actions">
-        <a href="login.html" class="login-btn">Login</a>
-
-        <a href="cart.html" class="cart-btn">
-            Cart (<span id="cart-count">0</span>)
+        <a href="index.html" class="back-home">
+            ← Back to Home
         </a>
-    </div>
 
-</header>
-
+    </header>
 
     <main class="auth-container">
+
         <div class="auth-card">
+
             <h1>Welcome Back!</h1>
+
             <p>Login to your GREENBRO AGRO account.</p>
 
+            <!-- GOOGLE LOGIN -->
+            <a href="/api/auth/google" class="google-auth-btn">
+                <span class="google-icon">G</span>
+                Continue with Google
+            </a>
+
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
+
+            <!-- NORMAL LOGIN -->
             <form id="loginForm">
 
                 <label for="login">Email or Phone Number</label>
+
                 <input
                     type="text"
                     id="login"
@@ -53,6 +53,7 @@
                 >
 
                 <label for="password">Password</label>
+
                 <input
                     type="password"
                     id="password"
@@ -72,15 +73,19 @@
                 Don't have an account?
                 <a href="register.html">Create an account</a>
             </p>
+
         </div>
+
     </main>
 
     <script>
+
         const loginForm = document.getElementById("loginForm");
         const loginMessage = document.getElementById("loginMessage");
         const loginButton = document.getElementById("loginButton");
 
         loginForm.addEventListener("submit", async function(event) {
+
             event.preventDefault();
 
             const login = document.getElementById("login").value.trim();
@@ -91,11 +96,14 @@
             loginMessage.textContent = "";
 
             try {
+
                 const response = await fetch("/api/auth/login", {
                     method: "POST",
+
                     headers: {
                         "Content-Type": "application/json"
                     },
+
                     body: JSON.stringify({
                         login: login,
                         password: password
@@ -112,20 +120,26 @@
                 localStorage.setItem("greenbroUser", JSON.stringify(data.user));
 
                 loginMessage.textContent = "Login successful! Redirecting...";
-loginMessage.style.color = "green";
+                loginMessage.style.color = "green";
 
-setTimeout(() => {
-    window.location.href = "dashboard.html";
-}, 1000);
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1000);
 
             } catch (error) {
+
                 loginMessage.textContent = error.message;
                 loginMessage.style.color = "red";
+
             } finally {
+
                 loginButton.disabled = false;
                 loginButton.textContent = "Login";
+
             }
+
         });
+
     </script>
 
 </body>

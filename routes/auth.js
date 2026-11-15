@@ -2,9 +2,116 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const { OAuth2Client } = require("google-auth-library");
 const User = require("../models/User");
 
+const googleClient = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_CALLBACK_URL
+);
 const router = express.Router();
+
+
+// GOOGLE SIGN-IN
+router.get("/google", (req, res) => {
+    try {
+        const state = crypto.randomBytes(32).toString("hex");
+
+        res.cookie("oauth_state", state, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 10 * 60 * 1000
+        });
+
+        const url = googleClient.generateAuthUrl({
+            access_type: "online",
+            scope: ["openid", "email", "profile"],
+            state,
+            prompt: "select_account"
+        });
+
+        res.redirect(url);
+
+    } catch (error) {
+        console.error("Google sign-in error:", error.message);
+        res.status(500).send("Unable to start Google sign-in.");
+    }
+});
+
+
+// GOOGLE SIGN-IN CALLBACK
+router.get("/google/callback", async (req, res) => {
+    try {
+        const { code, state } = req.query;
+        const savedState = req.cookies.oauth_state;
+
+        res.clearCookie("oauth_state");
+
+        if (!code || !state || !savedState || state !== savedState) {
+            return res.status(400).send("Google sign-in session is invalid. Please try again.");
+        }
+
+        const { tokens } = await googleClient.getToken(code);
+
+        const ticket = await googleClient.verifyIdToken({
+            idToken: tokens.id_token,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
+
+        const googleUser = ticket.getPayload();
+
+        if (!googleUser.email || !googleUser.email_verified) {
+            return res.status(400).send("Your Google email must be verified.");
+        }
+
+        let user = await User.findOne({
+            googleId: googleUser.sub
+        });
+
+        if (!user) {
+            const existingUser = await User.findOne({
+                email: googleUser.email.toLowerCase()
+            });
+
+            if (existingUser) {
+                return res.status(409).send(
+                    "An account already exists with this email. Please sign in using your existing email and password."
+                );
+            }
+
+            user = await User.create({
+                fullName: googleUser.name || "GREENBRO Customer",
+                email: googleUser.email.toLowerCase(),
+                googleId: googleUser.sub,
+                authProvider: "google",
+                isVerified: true
+            });
+        }
+
+       const token = jwt.sign(
+    {
+        id: user._id,
+        role: user.role,
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone || ""
+    },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "7d"
+            }
+        );
+
+        res.redirect("/google-auth-success.html#token=" + token);
+
+    } catch (error) {
+        console.error("Google callback error:", error.message);
+        res.status(500).send("Google sign-in failed. Please try again.");
+    }
+});
 
 // CUSTOMER REGISTRATION
 router.post("/register", async (req, res) => {
@@ -95,10 +202,16 @@ router.post("/login", async (req, res) => {
             });
         }
 
-        const passwordMatch = await bcrypt.compare(
-            password,
-            user.password
-        );
+        if (user.authProvider === "google" || !user.password) {
+    return res.status(400).json({
+        message: "This account uses Google sign-in. Please continue with Google."
+    });
+}
+
+const passwordMatch = await bcrypt.compare(
+    password,
+    user.password
+);
 
         if (!passwordMatch) {
             return res.status(401).json({
@@ -106,10 +219,13 @@ router.post("/login", async (req, res) => {
             });
         }
 
-       const token = jwt.sign(
+     const token = jwt.sign(
     {
         id: user._id,
-        role: user.role
+        role: user.role,
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone || ""
     },
     process.env.JWT_SECRET,
     {

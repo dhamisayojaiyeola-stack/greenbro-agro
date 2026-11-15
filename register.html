@@ -8,31 +8,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="auth-page">
 
-    <header class="navbar">
-
-        <div class="logo">
+    <header class="auth-header">
+        <div class="auth-logo">
             <a href="index.html">
                 <img src="image/logo.png" alt="GREENBRO AGRO Logo">
             </a>
         </div>
 
-        <nav class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="shop.html">Shop</a>
-            <a href="categories.html">Categories</a>
-            <a href="about.html">About Us</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-
-        <div class="nav-actions">
-            <a href="login.html" class="login-btn">Login</a>
-            <a href="cart.html" class="cart-btn">
-                Cart (<span id="cart-count">0</span>)
-            </a>
-        </div>
-
+        <a href="index.html" class="back-home">Back to Home</a>
     </header>
 
     <main class="auth-container">
@@ -42,6 +27,17 @@
             <h1>Create Your Account</h1>
             <p>Join GREENBRO AGRO and shop with ease.</p>
 
+            <!-- GOOGLE SIGN UP -->
+            <a href="/api/auth/google" class="google-auth-btn">
+                <span class="google-icon">G</span>
+                Continue with Google
+            </a>
+
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
+
+            <!-- NORMAL REGISTRATION -->
             <form id="registerForm">
 
                 <label for="fullName">Full Name</label>
@@ -148,7 +144,8 @@
                     throw new Error(data.message || "Registration failed.");
                 }
 
-                registerMessage.textContent = data.message + " You can now log in.";
+                registerMessage.textContent =
+                    data.message + " You can now log in.";
                 registerMessage.style.color = "green";
 
                 registerForm.reset();
