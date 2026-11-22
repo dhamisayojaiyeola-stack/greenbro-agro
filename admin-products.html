@@ -1,0 +1,561 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products | GREENBRO AGRO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="admin-dashboard">
+
+    <aside class="dashboard-sidebar">
+
+        <div class="dashboard-logo">
+            <a href="admin-dashboard.html">
+                <img src="image/logo.png" alt="GREENBRO AGRO Logo">
+            </a>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="admin-dashboard.html">Dashboard</a>
+            <a href="admin-products.html" class="active">Manage Products</a>
+            <a href="admin-orders.html">Manage Orders</a>
+            <a href="admin-customers.html">Customers</a>
+            <a href="index.html">View Website</a>
+        </nav>
+
+        <button id="logoutButton">Logout</button>
+
+    </aside>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-header">
+            <h1>Manage Products</h1>
+            <p>Add products, update prices and manage stock.</p>
+        </header>
+
+        <section class="dashboard-content">
+
+            <div class="product-management-header">
+                <h2>Product Inventory</h2>
+
+                <button id="showProductForm">
+                    + Add New Product
+                </button>
+            </div>
+
+            <div id="productFormContainer" style="display: none;">
+
+                <h2>Add New Product</h2>
+
+                <form id="productForm">
+
+                    <label>Product Name</label>
+                    <input type="text" id="productName" required>
+
+                    <label>Brand</label>
+                    <input type="text" id="productBrand">
+
+                    <label>Category</label>
+                    <input type="text" id="productCategory" required>
+
+                    <label>Description</label>
+                    <textarea id="productDescription"></textarea>
+
+                    <label>Product Image URL</label>
+                    <input type="text" id="productImage">
+
+<div class="product-variants-section">
+
+    <h3>Product Sizes & Prices</h3>
+
+    <div id="variantContainer">
+
+      <div class="variant-row">
+
+    <select class="variant-unit" required>
+        <option value="">Select Unit of Measurement</option>
+        <option value="kg">Kilogram (kg)</option>
+        <option value="unit">Unit</option>
+        <option value="carton">Carton</option>
+        <option value="tubers">Tubers</option>
+        <option value="basket">Basket</option>
+        <option value="bag">Bag</option>
+        <option value="litres">Litres</option>
+        <option value="pack">Pack</option>
+    </select>
+
+    <input type="text" class="variant-size"
+    placeholder="Size / Weight (e.g. 50)" >
+
+    <input type="number" class="variant-price"
+        placeholder="Price (₦)" min="0" step="0.01" required>
+
+   <button type="button" class="remove-variant">
+        Remove
+    </button>
+
+</div>
+
+    </div>
+
+    <button type="button" id="addVariantButton">
+        + Add Another Size
+    </button>
+
+</div>
+                    <button type="submit">Save Product</button>
+                    <button type="button" id="cancelProductForm">Cancel</button>
+
+                    <p id="productMessage"></p>
+
+                </form>
+
+            </div>
+
+            <div class="product-inventory">
+                <h2>All Products</h2>
+
+                <div id="productList">
+                    Loading products...
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+  
+<script>
+    // ADMIN LOGIN PROTECTION
+
+    const token = localStorage.getItem("greenbroToken");
+    const savedUser = localStorage.getItem("greenbroUser");
+
+    if (!token || !savedUser) {
+        window.location.href = "login.html";
+    } else {
+        const user = JSON.parse(savedUser);
+
+        if (user.role !== "admin") {
+            window.location.href = "dashboard.html";
+        }
+    }
+
+    // LOGOUT
+
+    document.getElementById("logoutButton").addEventListener("click", function() {
+        localStorage.removeItem("greenbroToken");
+        localStorage.removeItem("greenbroUser");
+        window.location.href = "login.html";
+    });
+
+    // SHOW AND HIDE PRODUCT FORM
+
+    const showProductForm = document.getElementById("showProductForm");
+    const productFormContainer = document.getElementById("productFormContainer");
+    const cancelProductForm = document.getElementById("cancelProductForm");
+
+    showProductForm.addEventListener("click", function() {
+        productFormContainer.style.display = "block";
+    });
+
+    cancelProductForm.addEventListener("click", function() {
+    editingProductId = null;
+    productForm.reset();
+
+    variantContainer.innerHTML = `
+        <div class="variant-row">
+            <select class="variant-unit" required>
+                <option value="">Select Unit of Measurement</option>
+                <option value="kg">Kilogram (kg)</option>
+                <option value="unit">Unit</option>
+                <option value="carton">Carton</option>
+                <option value="tubers">Tubers</option>
+                <option value="basket">Basket</option>
+                <option value="bag">Bag</option>
+                <option value="litres">Litres</option>
+                <option value="pack">Pack</option>
+            </select>
+
+            <input type="text" class="variant-size"
+                placeholder="Size / Weight (e.g. 50)" >
+
+            <input type="number" class="variant-price"
+                placeholder="Price (₦)" min="0" step="0.01" required>
+
+            <button type="button" class="remove-variant" disabled>
+                Remove
+            </button>
+        </div>
+    `;
+
+    document.querySelector("#productFormContainer h2").textContent = "Add New Product";
+    productFormContainer.style.display = "none";
+});
+
+// ADD MULTIPLE PRODUCT SIZES
+
+const variantContainer = document.getElementById("variantContainer");
+const addVariantButton = document.getElementById("addVariantButton");
+
+addVariantButton.addEventListener("click", function() {
+    const newVariant = document.createElement("div");
+    newVariant.className = "variant-row";
+
+    newVariant.innerHTML = `
+        <select class="variant-unit" required>
+            <option value="">Select Unit of Measurement</option>
+            <option value="kg">Kilogram (kg)</option>
+            <option value="unit">Unit</option>
+            <option value="carton">Carton</option>
+            <option value="tubers">Tubers</option>
+            <option value="basket">Basket</option>
+            <option value="bag">Bag</option>
+            <option value="litres">Litres</option>
+            <option value="pack">Pack</option>
+        </select>
+
+        <input type="text" class="variant-size"
+            placeholder="Size / Weight (e.g. 50)" >
+
+        <input type="number" class="variant-price"
+            placeholder="Price (₦)" min="0" step="0.01" required>
+
+        <button type="button" class="remove-variant">
+            Remove
+        </button>
+    `;
+
+    variantContainer.appendChild(newVariant);
+});
+
+variantContainer.addEventListener("click", function(event) {
+    if (event.target.classList.contains("remove-variant")) {
+        if (variantContainer.querySelectorAll(".variant-row").length > 1) {
+            event.target.closest(".variant-row").remove();
+        }
+    }
+});
+
+
+    // LOAD PRODUCTS FROM MONGODB
+
+async function loadProducts() {
+    const productList = document.getElementById("productList");
+
+    try {
+        const response = await fetch("/api/products/admin/all", {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        const products = await response.json();
+
+        if (!response.ok) {
+            throw new Error(products.message || "Unable to load products.");
+        }
+
+        productList.innerHTML = "";
+
+        if (products.length === 0) {
+            productList.textContent = "No products have been added yet.";
+            return;
+        }
+
+        products.forEach(function(product) {
+            const card = document.createElement("div");
+            card.style.padding = "24px";
+            card.style.borderRadius = "14px";
+            card.style.background = "#ffffff";
+            card.style.border = "1px solid #e1e9df";
+            card.style.boxShadow = "0 4px 14px rgba(0,0,0,0.06)";
+            card.style.borderBottom = "1px solid #ddd";
+
+            // PRODUCT IMAGE
+            const image = document.createElement("img");
+           image.src = product.image || "products/rice.jpg";
+            image.alt = product.name;
+            image.style.width = "100%";
+            image.style.height = "180px";
+            image.style.objectFit = "cover";
+            image.style.borderRadius = "10px";
+            image.style.marginBottom = "15px";
+
+            const name = document.createElement("h3");
+            name.textContent = product.name;
+            name.style.color = "#174d2b";
+            name.style.fontSize = "21px";
+            name.style.marginBottom = "12px";
+            name.style.textTransform = "capitalize";
+
+            const details = document.createElement("p");
+            details.textContent =
+                "Brand: " + (product.brand || "Not specified") +
+                " | Category: " + product.category;
+            details.style.fontSize = "14px";
+            details.style.color = "#647568";
+            details.style.marginBottom = "15px";
+            details.style.lineHeight = "1.7";
+
+            const variants = document.createElement("div");
+            
+
+            product.variants.forEach(function(variant) {
+                const item = document.createElement("p");
+
+              const displayUnit = variant.unit || product.unit || variant.size || "Unit";
+
+item.textContent =
+    displayUnit +
+    " | Price: " +
+    (variant.price === null ? "Not set" : "₦" + variant.price);
+
+                variants.appendChild(item);
+            });
+
+            card.appendChild(image);
+            card.appendChild(name);
+            card.appendChild(details);
+            card.appendChild(variants);
+
+            const actions = document.createElement("div");
+
+const editButton = document.createElement("button");
+editButton.textContent = "Edit";
+editButton.className = "edit-product-btn";
+
+editButton.addEventListener("click", function() {
+    editProduct(product);
+});
+
+const deleteButton = document.createElement("button");
+deleteButton.textContent = "Delete";
+deleteButton.className = "delete-product-btn";
+
+deleteButton.addEventListener("click", function() {
+    deleteProduct(product._id);
+});
+
+actions.appendChild(editButton);
+actions.appendChild(deleteButton);
+
+actions.style.display = "flex";
+actions.style.gap = "12px";
+actions.style.marginTop = "18px";
+
+actions.appendChild(editButton);
+actions.appendChild(deleteButton);
+
+card.appendChild(actions);
+
+            productList.appendChild(card);
+        });
+
+    } catch (error) {
+        productList.textContent = error.message;
+    }
+}
+
+// TRACK THE PRODUCT BEING EDITED
+let editingProductId = null;
+
+
+// EDIT PRODUCT
+function editProduct(product) {
+    editingProductId = product._id;
+
+    document.getElementById("productName").value = product.name;
+    document.getElementById("productBrand").value = product.brand || "";
+    document.getElementById("productCategory").value = product.category;
+    document.getElementById("productDescription").value = product.description || "";
+    document.getElementById("productImage").value = product.image || "";
+
+    variantContainer.innerHTML = "";
+
+    product.variants.forEach(function(variant) {
+        const row = document.createElement("div");
+        row.className = "variant-row";
+
+        const unit = document.createElement("select");
+        unit.className = "variant-unit";
+        unit.required = true;
+
+        unit.innerHTML = `
+            <option value="">Select Unit of Measurement</option>
+            <option value="kg">Kilogram (kg)</option>
+            <option value="unit">Unit</option>
+            <option value="carton">Carton</option>
+            <option value="tubers">Tubers</option>
+            <option value="basket">Basket</option>
+            <option value="bag">Bag</option>
+            <option value="litres">Litres</option>
+            <option value="pack">Pack</option>
+        `;
+
+        unit.value = variant.unit || product.unit || "";
+
+        const size = document.createElement("input");
+        size.type = "text";
+        size.className = "variant-size";
+        size.placeholder = "Size / Weight (e.g. 50)";
+        size.required = true;
+        size.value = variant.size === variant.unit ? "" : (variant.size ?? "");
+
+        const price = document.createElement("input");
+        price.type = "number";
+        price.className = "variant-price";
+        price.placeholder = "Price (₦)";
+        price.min = "0";
+        price.step = "0.01";
+        price.required = true;
+        price.value = variant.price ?? "";
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "remove-variant";
+        remove.textContent = "Remove";
+
+        row.append(unit, size, price, remove);
+        variantContainer.appendChild(row);
+    });
+
+    productFormContainer.style.display = "block";
+    document.querySelector("#productFormContainer h2").textContent = "Edit Product";
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// DELETE PRODUCT
+async function deleteProduct(productId) {
+    if (!confirm("Are you sure you want to delete this product?")) {
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/products/" + productId, {
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Unable to delete product.");
+        }
+
+        alert("Product deleted successfully!");
+        loadProducts();
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+loadProducts();
+
+    // SAVE PRODUCT TO MONGODB
+
+    const productForm = document.getElementById("productForm");
+    const productMessage = document.getElementById("productMessage");
+
+    productForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+      const variants = [];
+
+document.querySelectorAll(".variant-row").forEach(function(row) {
+    const unitValue = row.querySelector(".variant-unit").value;
+    const sizeValue = row.querySelector(".variant-size").value.trim();
+    const priceValue = row.querySelector(".variant-price").value;
+
+    variants.push({
+        size: sizeValue,
+        unit: unitValue,
+        price: priceValue === "" ? null : Number(priceValue)
+    });
+});
+
+       const productData = {
+    name: document.getElementById("productName").value.trim(),
+    brand: document.getElementById("productBrand").value.trim(),
+    category: document.getElementById("productCategory").value.trim(),
+    description: document.getElementById("productDescription").value.trim(),
+    image: document.getElementById("productImage").value.trim(),
+    variants: variants,
+    isAvailable: true
+};
+        try {
+        const response = await fetch(
+    editingProductId
+        ? "/api/products/" + editingProductId
+        : "/api/products",
+    {
+        method: editingProductId ? "PUT" : "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(productData)
+    }
+);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Unable to save product.");
+            }
+
+          productMessage.textContent = editingProductId
+    ? "Product updated successfully!"
+    : "Product saved successfully!";
+
+productMessage.style.color = "green";
+
+editingProductId = null;
+loadProducts();
+
+document.querySelector("#productFormContainer h2").textContent = "Add New Product";
+
+            productForm.reset();
+
+            variantContainer.innerHTML = `
+    <div class="variant-row">
+        <select class="variant-unit" required>
+            <option value="">Select Unit of Measurement</option>
+            <option value="kg">Kilogram (kg)</option>
+            <option value="unit">Unit</option>
+            <option value="carton">Carton</option>
+            <option value="tubers">Tubers</option>
+            <option value="basket">Basket</option>
+            <option value="bag">Bag</option>
+            <option value="litres">Litres</option>
+            <option value="pack">Pack</option>
+        </select>
+
+        <input type="text" class="variant-size"
+    placeholder="Size / Weight (e.g. 50)" required>
+
+        <input type="number" class="variant-price"
+            placeholder="Price (₦)" min="0" step="0.01" required>
+
+        <button type="button" class="remove-variant" disabled>
+            Remove
+        </button>
+    </div>
+`;
+
+        } catch (error) {
+            productMessage.textContent = error.message;
+            productMessage.style.color = "red";
+        }
+    });
+</script>
+
+</body>
+</html>

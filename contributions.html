@@ -10,51 +10,65 @@
 
 <body class="customer-dashboard">
 
-    <aside class="dashboard-sidebar">
+ 
+<aside class="dashboard-sidebar">
 
-        <div class="dashboard-logo">
-            <a href="dashboard.html">
-                <img src="image/logo.png" alt="GREENBRO AGRO">
-            </a>
-        </div>
+    <div class="dashboard-logo">
+        <a href="dashboard.html">
+            <img src="image/logo.png" alt="GREENBRO AGRO">
+        </a>
+    </div>
 
-        <div class="sidebar-menu">
+    <div class="sidebar-menu">
 
-            <p class="menu-heading">MAIN MENU</p>
+        <p class="menu-heading">MAIN MENU</p>
 
-            <a href="dashboard.html" class="sidebar-link">
-                <span>⌂</span> Home
-            </a>
+        <a href="dashboard.html" class="sidebar-link">
+            <span>⌂</span> Home
+        </a>
 
-            <a href="orders.html" class="sidebar-link">
-                <span>▣</span> My Orders
-            </a>
+        <a href="wallet.html" class="sidebar-link">
+            <span>▣</span> My Wallet
+        </a>
 
-            <a href="contributions.html" class="sidebar-link active">
-                <span>◉</span> My Contributions
-            </a>
+        <a href="shop.html" class="sidebar-link">
+            <span>▤</span> List of Items
+        </a>
 
-            <a href="shop.html" class="sidebar-link">
-                <span>▤</span> List of Items
-            </a>
+      <a href="cart.html" class="sidebar-link">
+    <span>🛒</span> My Cart
+    (<span class="cart-count">0</span>)
+</a>
 
-            <p class="menu-heading account-heading">ACCOUNT</p>
+        <a href="orders.html" class="sidebar-link">
+            <span>▣</span> My Orders
+        </a>
 
-            <a href="profile.html" class="sidebar-link">
-                <span>♙</span> Me / My Profile
-            </a>
+        <a href="contributions.html" class="sidebar-link active">
+            <span>◉</span> My Contributions
+        </a>
 
-            <a href="settings.html" class="sidebar-link">
-                <span>⚙</span> Settings
-            </a>
+        <p class="menu-heading account-heading">ACCOUNT</p>
 
-        </div>
+        <a href="profile.html" class="sidebar-link">
+            <span>♙</span> My Profile
+        </a>
 
-        <button class="sidebar-logout" id="logoutButton">
-            ⇥ Logout
-        </button>
+        <a href="delivery-details.html" class="sidebar-link">
+            <span>⌖</span> Delivery Details
+        </a>
 
-    </aside>
+        <a href="settings.html" class="sidebar-link">
+            <span>⚙</span> Settings
+        </a>
+
+    </div>
+
+    <button class="sidebar-logout" id="logoutButton">
+        ⇥ Logout
+    </button>
+
+</aside>
 
     <main class="dashboard-main">
 
@@ -136,27 +150,27 @@
 
     <nav class="mobile-dashboard-nav">
 
-        <a href="dashboard.html" class="mobile-nav-link">
-            <span>⌂</span> Home
-        </a>
+    <a href="dashboard.html" class="mobile-nav-link">
+        <span>⌂</span> Home
+    </a>
 
-        <a href="orders.html" class="mobile-nav-link">
-            <span>▣</span> Orders
-        </a>
+    <a href="shop.html" class="mobile-nav-link">
+        <span>▤</span> Shop
+    </a>
 
-        <a href="contributions.html" class="mobile-nav-link active">
-            <span>◉</span> Contributions
-        </a>
+    <a href="cart.html" class="mobile-nav-link">
+        <span>🛒</span> Cart
+    </a>
 
-        <a href="shop.html" class="mobile-nav-link">
-            <span>▤</span> Shop
-        </a>
+    <a href="orders.html" class="mobile-nav-link">
+        <span>▣</span> Orders
+    </a>
 
-        <a href="profile.html" class="mobile-nav-link">
-            <span>♙</span> Me
-        </a>
+    <a href="profile.html" class="mobile-nav-link">
+        <span>♙</span> Profile
+    </a>
 
-    </nav>
+</nav>
 
     <script>
         const token = localStorage.getItem("greenbroToken");
@@ -178,6 +192,6 @@
             window.location.href = "login.html";
         });
     </script>
-
+<script src="script.js"></script>
 </body>
 </html>

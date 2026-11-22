@@ -8,48 +8,166 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="customer-dashboard">
 
-    <
-<header class="navbar">
+    
+<aside class="dashboard-sidebar">
 
-    <div class="logo">
-        <a href="index.html">
-            <img src="image/logo.png" alt="GREENBRO AGRO Logo">
+    <div class="dashboard-logo">
+        <a href="dashboard.html">
+            <img src="image/logo.png" alt="GREENBRO AGRO">
         </a>
     </div>
 
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="shop.html">Shop</a>
-        <a href="categories.html">Categories</a>
-        <a href="about.html">About Us</a>
-        <a href="contact.html">Contact</a>>
-    </nav>
+    <div class="sidebar-menu">
 
-    <div class="nav-actions">
-        <button class="login-btn">Login</button>
+        <p class="menu-heading">MAIN MENU</p>
 
-        <a href="cart.html" class="cart-btn">
-            Cart (<span id="cart-count">0</span>)
+        <a href="dashboard.html" class="sidebar-link">
+            <span>⌂</span> Home
         </a>
+
+        <a href="wallet.html" class="sidebar-link">
+            <span>▣</span> My Wallet
+        </a>
+
+        <a href="shop.html" class="sidebar-link">
+            <span>▤</span> List of Items
+        </a>
+
+        <a href="cart.html" class="sidebar-link active">
+            <span>🛒</span> My Cart
+            (<span id="cart-count" class="cart-count">0</span>)
+        </a>
+
+        <a href="orders.html" class="sidebar-link">
+            <span>▣</span> My Orders
+        </a>
+
+        <a href="contributions.html" class="sidebar-link">
+            <span>◉</span> My Contributions
+        </a>
+
+        <p class="menu-heading account-heading">ACCOUNT</p>
+
+        <a href="profile.html" class="sidebar-link">
+            <span>♙</span> My Profile
+        </a>
+
+        <a href="delivery-details.html" class="sidebar-link">
+            <span>⌖</span> Delivery Details
+        </a>
+
+        <a href="settings.html" class="sidebar-link">
+            <span>⚙</span> Settings
+        </a>
+
     </div>
 
-</header>
+    <button id="logoutButton" class="sidebar-logout">
+        ⇥ Logout
+    </button>
 
-    <main class="cart-page">
-        <h1>My Shopping Cart</h1>
+</aside>
 
-        <div id="cart-items">
-            <!-- Cart products will appear here -->
-        </div>
+    <main class="dashboard-main">
 
-        <div class="cart-summary">
-            <h3>Total Items: <span id="total-items">0</span></h3>
-        </div>
+        <header class="dashboard-topbar">
+            <div>
+                <h2>My Shopping Cart</h2>
+                <p>Review your selected foodstuffs before checkout.</p>
+            </div>
 
-        <a href="shop.html" class="continue-shopping">Continue Shopping</a>
+            <div class="dashboard-user">
+                <span id="topCustomerName">Customer</span>
+            </div>
+        </header>
+
+        <section class="cart-page">
+
+            <div class="section-heading">
+                <p class="section-tagline">YOUR SHOPPING LIST</p>
+                <h2>My Cart</h2>
+                <p>Review your products, quantities and prices.</p>
+            </div>
+
+            <div id="cart-items">
+                <!-- Cart products will appear here -->
+            </div>
+
+          <div class="cart-summary">
+
+    <h3>
+        Total Items:
+        <span id="total-items">0</span>
+    </h3>
+
+    <h2>
+        Shopping Total:
+        <span id="cart-total">₦0.00</span>
+    </h2>
+
+    <a href="checkout.html" class="checkout-button">
+        Proceed to Checkout →
+    </a>
+
+</div>
+
+            <a href="shop.html" class="continue-shopping">
+                Continue Shopping
+            </a>
+
+        </section>
+
     </main>
+
+   <nav class="mobile-dashboard-nav">
+
+    <a href="dashboard.html" class="mobile-nav-link">
+        <span>⌂</span> Home
+    </a>
+
+    <a href="shop.html" class="mobile-nav-link">
+        <span>▤</span> Shop
+    </a>
+
+    <a href="cart.html" class="mobile-nav-link active">
+        <span>🛒</span> Cart
+    </a>
+
+    <a href="orders.html" class="mobile-nav-link">
+        <span>▣</span> Orders
+    </a>
+
+    <a href="profile.html" class="mobile-nav-link">
+        <span>♙</span> Profile
+    </a>
+
+</nav>
+
+    <script>
+        const token = localStorage.getItem("greenbroToken");
+        const savedUser = localStorage.getItem("greenbroUser");
+
+        if (!token || !savedUser) {
+            window.location.href = "login.html";
+        } else {
+            const user = JSON.parse(savedUser);
+
+            if (user.role === "admin") {
+                window.location.href = "admin-dashboard.html";
+            } else {
+                const firstName = user.fullName.split(" ")[0];
+                document.getElementById("topCustomerName").textContent = firstName;
+            }
+        }
+
+        document.getElementById("logoutButton").addEventListener("click", function() {
+            localStorage.removeItem("greenbroToken");
+            localStorage.removeItem("greenbroUser");
+            window.location.href = "login.html";
+        });
+    </script>
 
     <script src="script.js"></script>
 

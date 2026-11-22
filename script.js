@@ -3,18 +3,20 @@
 
 let cart = JSON.parse(localStorage.getItem("greenbroCart")) || [];
 
-const cartDisplay = document.getElementById("cart-count");
-const addButtons = document.querySelectorAll(".add-cart-btn");
 
-// Update cart count
+// Update cart count everywhere the counter appears
 function updateCartCount() {
-    if (cartDisplay) {
-        const total = cart.reduce(function(sum, item) {
-            return sum + item.quantity;
-        }, 0);
 
-        cartDisplay.textContent = total;
-    }
+    const cartDisplays = document.querySelectorAll(".cart-count");
+
+    const total = cart.reduce(function(sum, item) {
+        return sum + (Number(item.quantity) || 0);
+    }, 0);
+
+    cartDisplays.forEach(function(display) {
+        display.textContent = total;
+    });
+
 }
 
 // Save cart
@@ -66,37 +68,97 @@ addButtons.forEach(function(button) {
     });
 });
 
-// Display products inside the cart page
+// DISPLAY PRODUCTS INSIDE THE CART PAGE
+
 function displayCart() {
 
     const cartItems = document.getElementById("cart-items");
     const totalItemsDisplay = document.getElementById("total-items");
+    const cartTotalDisplay = document.getElementById("cart-total");
 
     if (!cartItems) return;
 
     cartItems.innerHTML = "";
 
     let totalItems = 0;
+    let grandTotal = 0;
 
     if (cart.length === 0) {
+
         cartItems.innerHTML = "<p>Your cart is currently empty.</p>";
+
     }
 
     cart.forEach(function(item, index) {
 
-        totalItems += item.quantity;
+        const quantity = Number(item.quantity) || 0;
+        const price = Number(item.price) || 0;
+        const subtotal = price * quantity;
+
+        totalItems += quantity;
+        grandTotal += subtotal;
 
         const itemDiv = document.createElement("div");
         itemDiv.className = "cart-item";
 
         const name = document.createElement("h3");
-        name.textContent = item.name;
+        name.textContent = item.name +
+            (item.brand ? " - " + item.brand : "");
 
         const size = document.createElement("p");
-        size.textContent = "Size: " + item.size;
 
-        const quantity = document.createElement("p");
-        quantity.textContent = "Quantity: " + item.quantity;
+        const unitLabels = {
+            kg: "Kilogram (kg)",
+            unit: "Unit",
+            carton: "Carton",
+            tubers: "Tubers",
+            basket: "Basket",
+            bag: "Bag",
+            litres: "Litres",
+            pack: "Pack"
+        };
+
+        size.textContent = "Size: " +
+            (item.size ? item.size + " " : "") +
+            (unitLabels[item.unit] || item.unit || "Unit");
+
+        const priceDisplay = document.createElement("p");
+        priceDisplay.textContent =
+            "Price per unit: ₦" + price.toLocaleString();
+
+       const quantityContainer = document.createElement("div");
+quantityContainer.className = "cart-quantity-control";
+
+const decreaseButton = document.createElement("button");
+decreaseButton.textContent = "−";
+decreaseButton.className = "quantity-btn";
+
+const quantityDisplay = document.createElement("span");
+quantityDisplay.textContent = quantity;
+
+const increaseButton = document.createElement("button");
+increaseButton.textContent = "+";
+increaseButton.className = "quantity-btn";
+
+decreaseButton.addEventListener("click", function() {
+    if (quantity > 1) {
+        item.quantity--;
+        saveCart();
+    }
+});
+
+increaseButton.addEventListener("click", function() {
+    item.quantity++;
+    saveCart();
+});
+
+quantityContainer.appendChild(decreaseButton);
+quantityContainer.appendChild(quantityDisplay);
+quantityContainer.appendChild(increaseButton);
+
+        const subtotalDisplay = document.createElement("p");
+        subtotalDisplay.textContent =
+            "Subtotal: ₦" + subtotal.toLocaleString();
 
         const removeButton = document.createElement("button");
         removeButton.textContent = "Remove";
@@ -109,15 +171,24 @@ function displayCart() {
 
         itemDiv.appendChild(name);
         itemDiv.appendChild(size);
-        itemDiv.appendChild(quantity);
+        itemDiv.appendChild(priceDisplay);
+        itemDiv.appendChild(quantityContainer);
+        itemDiv.appendChild(subtotalDisplay);
         itemDiv.appendChild(removeButton);
 
         cartItems.appendChild(itemDiv);
+
     });
 
     if (totalItemsDisplay) {
         totalItemsDisplay.textContent = totalItems;
     }
+
+    if (cartTotalDisplay) {
+        cartTotalDisplay.textContent =
+            "₦" + grandTotal.toLocaleString();
+    }
+
 }
 
 // Load saved cart when page opens
@@ -177,5 +248,3 @@ if (slides.length > 0) {
 
     startSlider();
 }
-// GREENBRO AGRO SHOPPING CART
-let cart = JSON.parse(localStorage.getItem("greenbroCart")) || [];

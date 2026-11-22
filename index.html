@@ -5,235 +5,277 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>GREENBRO AGRO | Agricultural Connect</title>
+    <title>GREENBRO AGRO | Quality Foodstuff & Flexible Contributions</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="landing-page">
 
-    <!-- Website Header -->
-   
+    <!-- NAVIGATION -->
+    <header class="landing-navbar">
 
-<header class="navbar">
-
-    <div class="logo">
-        <a href="index.html">
+        <a href="index.html" class="landing-logo">
             <img src="image/logo.png" alt="GREENBRO AGRO Logo">
         </a>
-    </div>
 
-    <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="shop.html">Shop</a>
-        <a href="categories.html">Categories</a>
-        <a href="about.html">About Us</a>
-        <a href="contact.html">Contact</a>
-    </nav>
+        <nav class="landing-nav-links">
+            <a href="index.html" class="current">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="#services">Our Services</a>
+            <a href="contact.html">Contact Us</a>
+        </nav>
 
-    <div class="nav-actions">
-        <<a href="login.html" class="login-btn">Login</a>
-        <a href="cart.html" class="cart-btn">
-            Cart (<span id="cart-count">0</span>)
-        </a>
-    </div>
-
-</header>>
-
-<!-- HERO SECTION -->
-
-<
-<!-- HOMEPAGE IMAGE SLIDER -->
-
-<section class="hero-slider">
-
-    <div class="hero-slide active">
-        <img src="image/products/rice.jpg" alt="Premium raw rice">
-
-        <div class="hero-overlay"></div>
-
-        <div class="hero-content">
-            <p class="hero-tagline">WELCOME TO GREENBRO AGRO</p>
-            <h1>Fresh Food.<br>Better Living.</h1>
-            <p>Your trusted agricultural marketplace. Get quality rice, beans, yam, meat, chicken and other farm products delivered to your doorstep.</p>
-            <a href="shop.html" class="shop-btn">Shop Now</a>
-        </div>
-    </div>
-
-    <div class="hero-slide">
-        <img src="image/products/beans.jpg" alt="Quality farm grains">
-
-        <div class="hero-overlay"></div>
-
-        <div class="hero-content">
-            <p class="hero-tagline">QUALITY YOU CAN TRUST</p>
-            <h1>Good Food.<br>Better Choices.</h1>
-            <p>Discover quality rice, beans and other essential grains for your home and business.</p>
-            <a href="shop.html" class="shop-btn">Explore Products</a>
-        </div>
-    </div>
-
-    <div class="hero-slide">
-        <img src="image/products/yam.jpg" alt="Fresh farm yam">
-
-        <div class="hero-overlay"></div>
-
-        <div class="hero-content">
-            <p class="hero-tagline">FRESH FROM THE FARM</p>
-            <h1>Natural Goodness.<br>Delivered Fresh.</h1>
-            <p>Get fresh yam, potatoes and other farm produce conveniently.</p>
-            <a href="shop.html" class="shop-btn">Shop Fresh Produce</a>
-        </div>
-    </div>
-
-    <div class="hero-slide">
-        <img src="image/products/chicken.jpg" alt="Quality chicken">
-
-        <div class="hero-overlay"></div>
-
-        <div class="hero-content">
-            <p class="hero-tagline">QUALITY MEAT & POULTRY</p>
-            <h1>Fresh Picks.<br>Quality Always.</h1>
-            <p>Find quality chicken, beef and other products for your everyday meals.</p>
-            <a href="shop.html" class="shop-btn">Shop Now</a>
-        </div>
-    </div>
-
-    <button class="slider-arrow prev-slide" aria-label="Previous slide">&#10094;</button>
-    <button class="slider-arrow next-slide" aria-label="Next slide">&#10095;</button>
-
-    <div class="slider-dots">
-        <button class="slider-dot active" aria-label="Slide 1"></button>
-        <button class="slider-dot" aria-label="Slide 2"></button>
-        <button class="slider-dot" aria-label="Slide 3"></button>
-        <button class="slider-dot" aria-label="Slide 4"></button>
-    </div>
-
-</section>
-
-
-<!-- PRODUCT CATEGORIES SECTION -->
-
-<section class="categories">
-
-    <div class="section-heading">
-        <p class="section-tagline">EXPLORE OUR MARKETPLACE</p>
-        <h2>Shop By Category</h2>
-        <p>Everything you need, all in one place.</p>
-    </div>
-
-    <div class="category-container">
-
-        <div class="category-card">
-            <div class="category-icon">🌾</div>
-            <h3>Grains</h3>
-            <p>Rice, Beans, Maize and more.</p>
-            <a href="#">Explore Products →</a>
+        <div class="landing-nav-actions">
+            <a href="login.html" class="landing-login">Login</a>
+            <a href="register.html" class="landing-signup">Create Account</a>
         </div>
 
-        <div class="category-card">
-            <div class="category-icon">🍠</div>
-            <h3>Tubers</h3>
-            <p>Yam, Potatoes, Cassava and more.</p>
-            <a href="#">Explore Products →</a>
-        </div>
+    </header>
 
-        <div class="category-card">
-            <div class="category-icon">🍗</div>
-            <h3>Meat & Poultry</h3>
-            <p>Beef, Chicken, Turkey and more.</p>
-            <a href="#">Explore Products →</a>
-        </div>
 
-        <div class="category-card">
-            <div class="category-icon">🥬</div>
-            <h3>Vegetables</h3>
-            <p>Fresh vegetables and farm produce.</p>
-            <a href="#">Explore Products →</a>
-        </div>
+    <!-- HERO SECTION -->
+    <section class="landing-hero">
 
-    </div>
+        <div class="landing-hero-overlay"></div>
 
-</section>
+        <div class="landing-hero-content">
 
-<!-- FEATURED PRODUCTS SECTION -->
+            <span class="landing-tagline">
+                WELCOME TO GREENBRO AGRO
+            </span>
 
-<section class="products">
+            <h1>
+                Making Quality Foodstuff
+                <span>Accessible to Everyone.</span>
+            </h1>
 
-    <div class="section-heading">
-        <p class="section-tagline">FRESH FROM THE FARM</p>
-        <h2>Our Featured Products</h2>
-        <p>Quality products selected for your everyday needs.</p>
-    </div>
+            <p>
+                Your trusted agricultural partner for quality foodstuff,
+                convenient shopping and flexible foodstuff contribution plans.
+                Get the products you need and manage your purchases with ease.
+            </p>
 
-    <div class="product-container">
+            <div class="landing-hero-buttons">
+                <a href="register.html" class="landing-primary-btn">
+                    Get Started
+                </a>
 
-        <div class="product-card">
-            <div class="product-image">🍚</div>
-            <div class="product-info">
-                <span class="product-category">Grains</span>
-                <h3>Premium Rice</h3>
-                <p class="product-price">Price coming soon</p>
-                <button class="add-cart-btn">Add to Cart</button>
+                <a href="about.html" class="landing-secondary-btn">
+                    Learn More
+                </a>
             </div>
-        </div>
 
-        <div class="product-card">
-            <div class="product-image">🫘</div>
-            <div class="product-info">
-                <span class="product-category">Grains</span>
-                <h3>Honey Beans</h3>
-                <p class="product-price">Price coming soon</p>
-                <button class="add-cart-btn">Add to Cart</button>
+            <div class="landing-trust-note">
+                Quality Products. Convenient Service. Better Living.
             </div>
+
         </div>
 
-        <div class="product-card">
-            <div class="product-image">🍠</div>
-            <div class="product-info">
-                <span class="product-category">Tubers</span>
-                <h3>Fresh Yam</h3>
-                <p class="product-price">Price coming soon</p>
-                <button class="add-cart-btn">Add to Cart</button>
+    </section>
+
+
+    <!-- INTRODUCTION -->
+    <section class="landing-introduction">
+
+        <div class="landing-section-heading">
+            <span>WHO WE ARE</span>
+
+            <h2>Welcome to GREENBRO AGRO</h2>
+
+            <p>
+                We are committed to making foodstuff purchasing easier,
+                more convenient and accessible through a customer-focused
+                digital platform.
+            </p>
+        </div>
+
+        <div class="landing-intro-grid">
+
+            <div class="landing-intro-card">
+                <div class="landing-card-icon">🌾</div>
+                <h3>Quality Foodstuff</h3>
+                <p>
+                    Access a variety of essential foodstuff and agricultural
+                    products for your household and everyday needs.
+                </p>
             </div>
-        </div>
 
-        <div class="product-card">
-            <div class="product-image">🍗</div>
-            <div class="product-info">
-                <span class="product-category">Poultry</span>
-                <h3>Frozen Chicken</h3>
-                <p class="product-price">Price coming soon</p>
-                <button class="add-cart-btn">Add to Cart</button>
+            <div class="landing-intro-card">
+                <div class="landing-card-icon">📦</div>
+                <h3>Flexible Packages</h3>
+                <p>
+                    Choose from available packages or create a foodstuff
+                    package that suits your preferences.
+                </p>
             </div>
-        </div>
 
-        <div class="product-card">
-            <div class="product-image">🥩</div>
-            <div class="product-info">
-                <span class="product-category">Meat</span>
-                <h3>Fresh Beef</h3>
-                <p class="product-price">Price coming soon</p>
-                <button class="add-cart-btn">Add to Cart</button>
+            <div class="landing-intro-card">
+                <div class="landing-card-icon">💳</div>
+                <h3>Flexible Contributions</h3>
+                <p>
+                    Plan your foodstuff purchases and make contributions
+                    gradually through available payment plans.
+                </p>
             </div>
+
         </div>
 
-        <div class="product-card">
-            <div class="product-image">🥔</div>
-            <div class="product-info">
-                <span class="product-category">Tubers</span>
-                <h3>Sweet Potatoes</h3>
-                <p class="product-price">Price coming soon</p>
-                <button class="add-cart-btn">Add to Cart</button>
+    </section>
+
+
+    <!-- SERVICES -->
+    <section class="landing-services" id="services">
+
+        <div class="landing-section-heading">
+            <span>WHAT WE OFFER</span>
+
+            <h2>Our Services</h2>
+
+            <p>
+                Everything designed to make your foodstuff purchasing
+                experience easier.
+            </p>
+        </div>
+
+        <div class="landing-service-grid">
+
+            <div class="landing-service-card">
+                <div class="landing-service-icon">🛒</div>
+
+                <h3>Foodstuff Shopping</h3>
+
+                <p>
+                    Browse and purchase different foodstuff products
+                    conveniently through your customer account.
+                </p>
             </div>
+
+            <div class="landing-service-card">
+                <div class="landing-service-icon">🥬</div>
+
+                <h3>Custom Foodstuff Packages</h3>
+
+                <p>
+                    Select your preferred food items and quantities
+                    to create a package that meets your needs.
+                </p>
+            </div>
+
+            <div class="landing-service-card">
+                <div class="landing-service-icon">💰</div>
+
+                <h3>Foodstuff Contributions</h3>
+
+                <p>
+                    Make gradual payments towards your chosen
+                    foodstuff package and monitor your progress.
+                </p>
+            </div>
+
+            <div class="landing-service-card">
+                <div class="landing-service-icon">📊</div>
+
+                <h3>Customer Dashboard</h3>
+
+                <p>
+                    Manage your orders, contributions, wallet
+                    and account activities from one place.
+                </p>
+            </div>
+
         </div>
 
-    </div>
-
-</section>
+    </section>
 
 
-    <script src="script.js"></script>
+    <!-- WHY CHOOSE US -->
+    <section class="landing-why-us">
+
+        <div class="landing-why-content">
+
+            <span>WHY GREENBRO AGRO?</span>
+
+            <h2>A Simpler Way to Manage Your Foodstuff Needs.</h2>
+
+            <p>
+                We believe purchasing foodstuff should be convenient
+                and straightforward. GREENBRO AGRO brings essential
+                foodstuff services together in one easy-to-use platform.
+            </p>
+
+            <ul>
+                <li>Convenient online customer platform</li>
+                <li>Different foodstuff options</li>
+                <li>Customisable foodstuff packages</li>
+                <li>Flexible contribution arrangements</li>
+                <li>Easy order and payment tracking</li>
+            </ul>
+
+        </div>
+
+        <div class="landing-why-image">
+            <img src="image/products/beans.jpg" alt="Quality agricultural foodstuff">
+        </div>
+
+    </section>
+
+
+    <!-- CALL TO ACTION -->
+    <section class="landing-cta">
+
+        <span>GET STARTED TODAY</span>
+
+        <h2>Your Foodstuff Needs, Made Easier.</h2>
+
+        <p>
+            Create your GREENBRO AGRO account and enjoy a more
+            convenient way to manage your foodstuff purchases
+            and contributions.
+        </p>
+
+        <a href="register.html">Create Your Account</a>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="landing-footer">
+
+        <div class="landing-footer-content">
+
+            <div class="landing-footer-brand">
+                <img src="image/logo.png" alt="GREENBRO AGRO Logo">
+
+                <p>
+                    Making quality foodstuff accessible through
+                    convenient purchasing and flexible contribution plans.
+                </p>
+            </div>
+
+            <div class="landing-footer-links">
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="#services">Our Services</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+
+            <div class="landing-footer-links">
+                <h3>Customer Account</h3>
+                <a href="login.html">Login</a>
+                <a href="register.html">Create Account</a>
+            </div>
+
+        </div>
+
+        <div class="landing-footer-bottom">
+            <p>
+                &copy; 2026 GREENBRO AGRO. All Rights Reserved.
+            </p>
+        </div>
+
+    </footer>
 
 </body>
 </html>

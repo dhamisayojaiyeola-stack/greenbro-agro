@@ -122,9 +122,13 @@
                 loginMessage.textContent = "Login successful! Redirecting...";
                 loginMessage.style.color = "green";
 
-                setTimeout(() => {
-                    window.location.href = "dashboard.html";
-                }, 1000);
+    setTimeout(() => {
+    if (data.user.role === "admin") {
+        window.location.href = "admin-dashboard.html";
+    } else {
+        window.location.href = "dashboard.html";
+    }
+}, 1000);
 
             } catch (error) {
 

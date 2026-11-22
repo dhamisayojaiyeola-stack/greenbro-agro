@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Details | GREENBRO AGRO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="customer-dashboard">
+
+    <aside class="dashboard-sidebar">
+
+        <div class="dashboard-logo">
+            <a href="dashboard.html">
+                <img src="image/logo.png" alt="GREENBRO AGRO">
+            </a>
+        </div>
+
+        <div class="sidebar-menu">
+
+            <p class="menu-heading">MAIN MENU</p>
+
+            <a href="dashboard.html" class="sidebar-link">
+                <span>⌂</span> Home
+            </a>
+
+            <a href="wallet.html" class="sidebar-link">
+                <span>💳</span> My Wallet
+            </a>
+
+            <a href="shop.html" class="sidebar-link">
+                <span>▤</span> List of Items
+            </a>
+
+            <a href="cart.html" class="sidebar-link">
+                <span>🛒</span> My Cart
+                (<span class="cart-count">0</span>)
+            </a>
+
+            <a href="orders.html" class="sidebar-link">
+                <span>▣</span> My Orders
+            </a>
+
+            <a href="contributions.html" class="sidebar-link">
+                <span>◉</span> My Contributions
+            </a>
+
+            <p class="menu-heading account-heading">ACCOUNT</p>
+
+            <a href="profile.html" class="sidebar-link">
+                <span>♙</span> My Profile
+            </a>
+
+            <a href="delivery-details.html" class="sidebar-link active">
+                <span>📍</span> Delivery Details
+            </a>
+
+            <a href="settings.html" class="sidebar-link">
+                <span>⚙</span> Settings
+            </a>
+
+        </div>
+
+        <button id="logoutButton" class="sidebar-logout">
+            ⇥ Logout
+        </button>
+
+    </aside>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-topbar">
+            <div>
+                <h2>Delivery Details</h2>
+                <p>Manage your delivery information.</p>
+            </div>
+
+            <div class="dashboard-user">
+                <span id="topCustomerName">Customer</span>
+            </div>
+        </header>
+
+        <section class="cart-page">
+
+            <div class="section-heading">
+                <p class="section-tagline">YOUR ACCOUNT</p>
+                <h2>My Delivery Address</h2>
+                <p>Save your delivery information for faster checkout.</p>
+            </div>
+
+            <div id="deliveryMessage"></div>
+
+            <form id="deliveryForm">
+
+                <div class="form-group">
+                    <label for="recipientName">Recipient's Full Name</label>
+                    <input type="text" id="recipientName"
+                        placeholder="Enter recipient's name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="deliveryPhone">Phone Number</label>
+                    <input type="tel" id="deliveryPhone"
+                        placeholder="Enter phone number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="deliveryState">State</label>
+                    <input type="text" id="deliveryState"
+                        placeholder="Enter state" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="deliveryLGA">Local Government Area</label>
+                    <input type="text" id="deliveryLGA"
+                        placeholder="Enter LGA" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="deliveryAddress">Full Delivery Address</label>
+                    <textarea id="deliveryAddress"
+                        placeholder="House number, street name and area"
+                        rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="deliveryLandmark">Nearest Landmark</label>
+                    <input type="text" id="deliveryLandmark"
+                        placeholder="Enter a nearby landmark">
+                </div>
+
+                <button type="submit" class="primary-btn">
+                    Save Delivery Details
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <script>
+        const token = localStorage.getItem("greenbroToken");
+        const savedUser = localStorage.getItem("greenbroUser");
+
+        if (!token || !savedUser) {
+
+            window.location.href = "login.html";
+
+        } else {
+
+            const user = JSON.parse(savedUser);
+
+            if (user.role === "admin") {
+
+                window.location.href = "admin-dashboard.html";
+
+            } else {
+
+                document.getElementById("topCustomerName").textContent =
+                    user.fullName.split(" ")[0];
+
+            }
+        }
+
+        // CUSTOMER LOGOUT
+
+        document.getElementById("logoutButton").addEventListener("click", function() {
+
+            localStorage.removeItem("greenbroToken");
+            localStorage.removeItem("greenbroUser");
+
+            window.location.href = "login.html";
+
+        });
+    </script>
+
+    <script>
+
+        // GET CUSTOMER'S SAVED DELIVERY DETAILS
+
+        const deliveryToken = localStorage.getItem("greenbroToken");
+
+        const deliveryForm = document.getElementById("deliveryForm");
+        const deliveryMessage = document.getElementById("deliveryMessage");
+
+        async function loadDeliveryDetails() {
+
+            try {
+
+                const response = await fetch("/api/delivery", {
+                    headers: {
+                        "Authorization": "Bearer " + deliveryToken
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message);
+                }
+
+                const details = data.deliveryDetails;
+
+                document.getElementById("recipientName").value = details.recipientName || "";
+                document.getElementById("deliveryPhone").value = details.deliveryPhone || "";
+                document.getElementById("deliveryState").value = details.state || "";
+                document.getElementById("deliveryLGA").value = details.lga || "";
+                document.getElementById("deliveryAddress").value = details.address || "";
+                document.getElementById("deliveryLandmark").value = details.landmark || "";
+
+            } catch (error) {
+
+                deliveryMessage.textContent = error.message;
+
+            }
+        }
+
+
+        // SAVE CUSTOMER'S DELIVERY DETAILS
+
+        deliveryForm.addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const deliveryDetails = {
+                recipientName: document.getElementById("recipientName").value,
+                deliveryPhone: document.getElementById("deliveryPhone").value,
+                state: document.getElementById("deliveryState").value,
+                lga: document.getElementById("deliveryLGA").value,
+                address: document.getElementById("deliveryAddress").value,
+                landmark: document.getElementById("deliveryLandmark").value
+            };
+
+            try {
+
+                const response = await fetch("/api/delivery", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + deliveryToken
+                    },
+                    body: JSON.stringify(deliveryDetails)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message);
+                }
+
+                deliveryMessage.textContent = data.message;
+                deliveryMessage.style.color = "green";
+
+            } catch (error) {
+
+                deliveryMessage.textContent = error.message;
+                deliveryMessage.style.color = "red";
+
+            }
+
+        });
+
+
+        // LOAD DETAILS WHEN PAGE OPENS
+
+        loadDeliveryDetails();
+
+    </script>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

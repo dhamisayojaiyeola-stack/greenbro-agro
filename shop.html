@@ -4,238 +4,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Shop | GREENBRO AGRO</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="customer-dashboard">
 
-    <!-- NAVIGATION BAR -->
+    <aside class="dashboard-sidebar">
 
-    <header class="navbar">
-
-        <div class="logo">
-            <a href="index.html">
-                <img src="image/logo.png" alt="GREENBRO AGRO Logo">
+        <div class="dashboard-logo">
+            <a href="dashboard.html">
+                <img src="image/logo.png" alt="GREENBRO AGRO">
             </a>
         </div>
 
-        <nav class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="shop.html">Shop</a>
-            <a href="categories.html">Categories</a>
-            <a href="about.html">About Us</a>
-            <a href="contact.html">Contact</a>
-        </nav>
+        <div class="sidebar-menu">
 
-        <div class="nav-actions">
-            <button class="login-btn">Login</button>
+            <p class="menu-heading">MAIN MENU</p>
 
-            <a href="cart.html" class="cart-btn">
-                Cart (<span id="cart-count">0</span>)
+            <a href="dashboard.html" class="sidebar-link">
+                <span>⌂</span> Home
             </a>
-        </div>
 
-    </header>
+            <a href="orders.html" class="sidebar-link">
+                <span>▣</span> My Orders
+            </a>
 
+            <a href="contributions.html" class="sidebar-link">
+                <span>◉</span> My Contributions
+            </a>
 
-    <!-- SHOP PAGE -->
+            <a href="shop.html" class="sidebar-link active">
+                <span>▤</span> List of Items
+            </a>
 
-    <section class="products">
+            <p class="menu-heading account-heading">ACCOUNT</p>
 
-        <div class="section-heading">
-            <p class="section-tagline">WELCOME TO OUR MARKETPLACE</p>
-            <h2>Shop Our Products</h2>
-            <p>Quality agricultural products, all in one place.</p>
-        </div>
+            <a href="profile.html" class="sidebar-link">
+                <span>♙</span> Me / My Profile
+            </a>
 
-        <div class="product-container">
-
-
-            <!-- PREMIUM RICE -->
-
-            <div class="product-card" data-product="rice">
-
-                <div class="product-image">
-                    <img src="image/products/rice.jpg" alt="Raw Premium Rice">
-                </div>
-
-                <div class="product-info">
-                    <span class="product-category">Grains</span>
-                    <h3>Premium Rice</h3>
-                    <p class="product-price">Price coming soon</p>
-
-                    <label for="rice-size">Choose Size:</label>
-                    <select id="rice-size" class="product-select">
-                        <option value="1kg">1kg</option>
-                        <option value="2kg">2kg</option>
-                        <option value="5kg">5kg</option>
-                        <option value="10kg">10kg</option>
-                        <option value="25kg">25kg</option>
-                        <option value="50kg">50kg (Full Bag)</option>
-                    </select>
-
-                    <label for="rice-quantity">Quantity:</label>
-                    <input type="number" id="rice-quantity" class="product-quantity" value="1" min="1">
-
-                    <button class="add-cart-btn">Add to Cart</button>
-                </div>
-
-            </div>
-
-
-            <!-- HONEY BEANS -->
-
-            <div class="product-card" data-product="beans">
-
-                <div class="product-image">
-                    <img src="image/products/beans.jpg" alt="Honey Beans">
-                </div>
-
-                <div class="product-info">
-                    <span class="product-category">Grains</span>
-                    <h3>Honey Beans</h3>
-                    <p class="product-price">Price coming soon</p>
-
-                    <label for="beans-size">Choose Size:</label>
-                    <select id="beans-size" class="product-select">
-                        <option value="1kg">1kg</option>
-                        <option value="2kg">2kg</option>
-                        <option value="5kg">5kg</option>
-                        <option value="10kg">10kg</option>
-                        <option value="25kg">25kg</option>
-                        <option value="50kg">50kg (Full Bag)</option>
-                    </select>
-
-                    <label for="beans-quantity">Quantity:</label>
-                    <input type="number" id="beans-quantity" class="product-quantity" value="1" min="1">
-
-                    <button class="add-cart-btn">Add to Cart</button>
-                </div>
-
-            </div>
-
-
-            <!-- FRESH YAM -->
-
-            <div class="product-card" data-product="yam">
-
-                <div class="product-image">
-                    <img src="image/products/yam.jpg" alt="Fresh Yam">
-                </div>
-
-                <div class="product-info">
-                    <span class="product-category">Tubers</span>
-                    <h3>Fresh Yam</h3>
-                    <p class="product-price">Price coming soon</p>
-
-                    <label for="yam-quantity">Number of Tubers:</label>
-                    <input type="number" id="yam-quantity" class="product-quantity" value="1" min="1">
-
-                    <button class="add-cart-btn">Add to Cart</button>
-                </div>
-
-            </div>
-
-
-            <!-- FROZEN CHICKEN -->
-
-            <div class="product-card" data-product="chicken">
-
-                <div class="product-image">
-                    <img src="image/products/chicken.jpg" alt="Frozen Chicken">
-                </div>
-
-                <div class="product-info">
-                    <span class="product-category">Poultry</span>
-                    <h3>Frozen Chicken</h3>
-                    <p class="product-price">Price coming soon</p>
-
-                    <label for="chicken-size">Choose Weight:</label>
-                    <select id="chicken-size" class="product-select">
-                        <option value="1kg">1kg</option>
-                        <option value="2kg">2kg</option>
-                        <option value="3kg">3kg</option>
-                        <option value="5kg">5kg</option>
-                    </select>
-
-                    <label for="chicken-quantity">Number of Packs:</label>
-                    <input type="number" id="chicken-quantity" class="product-quantity" value="1" min="1">
-
-                    <button class="add-cart-btn">Add to Cart</button>
-                </div>
-
-            </div>
-
-
-            <!-- FRESH BEEF -->
-
-            <div class="product-card" data-product="beef">
-
-                <div class="product-image">
-                    <img src="image/products/beef.jpg" alt="Fresh Beef">
-                </div>
-
-                <div class="product-info">
-                    <span class="product-category">Meat</span>
-                    <h3>Fresh Beef</h3>
-                    <p class="product-price">Price coming soon</p>
-
-                    <label for="beef-size">Choose Weight:</label>
-                    <select id="beef-size" class="product-select">
-                        <option value="0.5kg">0.5kg</option>
-                        <option value="1kg">1kg</option>
-                        <option value="2kg">2kg</option>
-                        <option value="3kg">3kg</option>
-                        <option value="5kg">5kg</option>
-                    </select>
-
-                    <label for="beef-quantity">Number of Packs:</label>
-                    <input type="number" id="beef-quantity" class="product-quantity" value="1" min="1">
-
-                    <button class="add-cart-btn">Add to Cart</button>
-                </div>
-
-            </div>
-
-
-            <!-- SWEET POTATOES -->
-
-            <div class="product-card" data-product="potatoes">
-
-                <div class="product-image">
-                    <img src="image/products/sweet-potatoes.jpg" alt="Fresh Sweet Potatoes">
-                </div>
-
-                <div class="product-info">
-                    <span class="product-category">Tubers</span>
-                    <h3>Sweet Potatoes</h3>
-                    <p class="product-price">Price coming soon</p>
-
-                    <label for="potato-size">Choose Weight:</label>
-                    <select id="potato-size" class="product-select">
-                        <option value="1kg">1kg</option>
-                        <option value="2kg">2kg</option>
-                        <option value="5kg">5kg</option>
-                        <option value="10kg">10kg</option>
-                    </select>
-
-                    <label for="potato-quantity">Quantity:</label>
-                    <input type="number" id="potato-quantity" class="product-quantity" value="1" min="1">
-
-                    <button class="add-cart-btn">Add to Cart</button>
-                </div>
-
-            </div>
-
+            <a href="settings.html" class="sidebar-link">
+                <span>⚙</span> Settings
+            </a>
 
         </div>
 
-    </section>
+        <button id="logoutButton" class="sidebar-logout">
+            ⇥ Logout
+        </button>
 
+    </aside>
 
+    <main class="dashboard-main">
+
+        <header class="dashboard-topbar">
+            <div>
+                <h2>Shop</h2>
+                <p>Explore and select your foodstuffs.</p>
+            </div>
+
+            <div class="dashboard-user">
+                <span id="topCustomerName">Customer</span>
+            </div>
+        </header>
+
+        <section class="products">
+
+            <div class="section-heading">
+                <p class="section-tagline">WELCOME TO OUR MARKETPLACE</p>
+                <h2>Shop Our Products</h2>
+                <p>Select your foodstuffs, choose your preferred sizes and quantities.</p>
+            </div>
+
+            <div class="package-instructions">
+                <h3>Build Your Shopping List!</h3>
+                <p>Choose a foodstuff, select the available product and size, enter your quantity and add it to your shopping list.</p>
+            </div>
+
+            <section class="food-picker">
+                <label for="foodSelector">SELECT FOODSTUFF</label>
+                <select id="foodSelector">
+                    <option value="">Choose a foodstuff...</option>
+                </select>
+            </section>
+
+            <section id="foodOptions" class="food-options" hidden>
+                <h2 id="selectedFoodTitle"></h2>
+                <div id="foodFields" class="food-fields"></div>
+
+                <button type="button" id="addFoodButton">
+                    + Add to My Shopping List
+                </button>
+            </section>
+
+            <section class="selected-package">
+
+                <div class="selected-package-heading">
+                    <h2>My Shopping List</h2>
+                    <span id="itemCount">0 items</span>
+                </div>
+
+                <div id="selectedItems">
+                    <p class="empty-package">
+                        Your selected foodstuffs will appear here.
+                    </p>
+                </div>
+
+                <div class="package-total">
+                    <span>Shopping Total</span>
+                    <h2 id="shoppingTotal">₦0.00</h2>
+                </div>
+
+                <button type="button" id="proceedToCart" class="package-submit-button">
+                    Proceed to Cart
+                </button>
+
+            </section>
+
+        </section>
+
+    </main>
+
+    <nav class="mobile-dashboard-nav">
+
+        <a href="dashboard.html" class="mobile-nav-link">
+            <span>⌂</span>
+            Home
+        </a>
+
+        <a href="orders.html" class="mobile-nav-link">
+            <span>▣</span>
+            Orders
+        </a>
+
+        <a href="contributions.html" class="mobile-nav-link">
+            <span>◉</span>
+            Contributions
+        </a>
+
+        <a href="shop.html" class="mobile-nav-link active">
+            <span>▤</span>
+            Shop
+        </a>
+
+        <a href="profile.html" class="mobile-nav-link">
+            <span>♙</span>
+            Me
+        </a>
+
+    </nav>
+
+    <script>
+        const token = localStorage.getItem("greenbroToken");
+        const savedUser = localStorage.getItem("greenbroUser");
+
+        if (!token || !savedUser) {
+            window.location.href = "login.html";
+        } else {
+            const user = JSON.parse(savedUser);
+
+            if (user.role === "admin") {
+                window.location.href = "admin-dashboard.html";
+            } else {
+                const firstName = user.fullName.split(" ")[0];
+                document.getElementById("topCustomerName").textContent = firstName;
+            }
+        }
+
+        document.getElementById("logoutButton").addEventListener("click", function() {
+            localStorage.removeItem("greenbroToken");
+            localStorage.removeItem("greenbroUser");
+            window.location.href = "login.html";
+        });
+    </script>
+
+    <script src="shop.js"></script>
     <script src="script.js"></script>
 
 </body>

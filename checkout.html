@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | GREENBRO AGRO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="customer-dashboard">
+
+    <aside class="dashboard-sidebar">
+
+        <div class="dashboard-logo">
+            <a href="dashboard.html">
+                <img src="image/logo.png" alt="GREENBRO AGRO">
+            </a>
+        </div>
+
+        <div class="sidebar-menu">
+
+            <p class="menu-heading">MAIN MENU</p>
+
+            <a href="dashboard.html" class="sidebar-link">
+                <span>⌂</span> Home
+            </a>
+
+            <a href="orders.html" class="sidebar-link">
+                <span>▣</span> My Orders
+            </a>
+
+            <a href="contributions.html" class="sidebar-link">
+                <span>◉</span> My Contributions
+            </a>
+
+            <a href="shop.html" class="sidebar-link">
+                <span>▤</span> List of Items
+            </a>
+
+            <a href="cart.html" class="sidebar-link">
+                <span>🛒</span> My Cart
+            </a>
+
+            <a href="delivery-details.html" class="sidebar-link">
+                <span>📍</span> Delivery Details
+            </a>
+
+            <p class="menu-heading account-heading">ACCOUNT</p>
+
+            <a href="profile.html" class="sidebar-link">
+                <span>♙</span> My Profile
+            </a>
+
+            <a href="settings.html" class="sidebar-link">
+                <span>⚙</span> Settings
+            </a>
+
+        </div>
+
+        <button id="logoutButton" class="sidebar-logout">
+            ⇥ Logout
+        </button>
+
+    </aside>
+
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-topbar">
+            <div>
+                <h2>Checkout</h2>
+                <p>Review your order before confirming.</p>
+            </div>
+
+            <div class="dashboard-user">
+                <span id="topCustomerName">Customer</span>
+            </div>
+        </header>
+
+
+        <section class="cart-page">
+
+            <div class="section-heading">
+                <p class="section-tagline">COMPLETE YOUR ORDER</p>
+                <h2>Checkout</h2>
+                <p>Review your items and confirm your delivery address.</p>
+            </div>
+
+
+            <!-- ORDER SUMMARY -->
+
+            <div class="checkout-section">
+
+                <h3>Order Summary</h3>
+
+                <div id="checkoutItems">
+                    Loading your items...
+                </div>
+
+                <div class="checkout-total">
+                    <h3>
+                        Shopping Total:
+                        <span id="checkoutTotal">₦0</span>
+                    </h3>
+                </div>
+
+            </div>
+
+
+            <!-- DELIVERY ADDRESS -->
+
+            <div class="checkout-section">
+
+                <h3>Delivery Information</h3>
+
+                <p>Is your saved delivery information still correct?</p>
+
+                <div id="checkoutAddress">
+                    Loading your delivery details...
+                </div>
+
+                <div id="addressChoice" style="display:none;">
+
+                    <button type="button" id="sameAddressButton">
+                        Yes, use this address
+                    </button>
+
+                    <a href="delivery-details.html">
+                        No, I want to change my address
+                    </a>
+
+                </div>
+
+                <p id="checkoutMessage"></p>
+
+            </div>
+
+
+            <!-- CONFIRM ORDER -->
+
+            <button type="button" id="confirmOrderButton" disabled>
+                Confirm Order
+            </button>
+
+            <p id="confirmationMessage"></p>
+
+            <a href="cart.html" class="continue-shopping">
+                Back to Cart
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        const token = localStorage.getItem("greenbroToken");
+        const savedUser = localStorage.getItem("greenbroUser");
+
+        if (!token || !savedUser) {
+            window.location.href = "login.html";
+        } else {
+            const user = JSON.parse(savedUser);
+
+            if (user.role === "admin") {
+                window.location.href = "admin-dashboard.html";
+            } else {
+                document.getElementById("topCustomerName").textContent =
+                    user.fullName.split(" ")[0];
+            }
+        }
+
+        document.getElementById("logoutButton").addEventListener("click", function() {
+            localStorage.removeItem("greenbroToken");
+            localStorage.removeItem("greenbroUser");
+            window.location.href = "login.html";
+        });
+
+
+        // LOAD SHOPPING CART
+
+        const cart = JSON.parse(localStorage.getItem("greenbroCart")) || [];
+
+        const checkoutItems = document.getElementById("checkoutItems");
+        const checkoutTotal = document.getElementById("checkoutTotal");
+
+        let grandTotal = 0;
+
+        if (cart.length === 0) {
+
+            checkoutItems.textContent = "Your shopping cart is empty.";
+
+        } else {
+
+            checkoutItems.innerHTML = "";
+
+            cart.forEach(function(item) {
+
+                const quantity = Number(item.quantity) || 0;
+                const price = Number(item.price) || 0;
+                const subtotal = quantity * price;
+
+                grandTotal += subtotal;
+
+                const itemDiv = document.createElement("div");
+
+                itemDiv.className = "checkout-item";
+
+                const itemName = document.createElement("h4");
+
+                itemName.textContent = item.name +
+                    (item.brand ? " - " + item.brand : "");
+
+                const itemDetails = document.createElement("p");
+
+                itemDetails.textContent =
+                    "Size: " + (item.size || "") +
+                    " " + (item.unit || "") +
+                    " | Quantity: " + quantity;
+
+                const itemPrice = document.createElement("p");
+
+                itemPrice.textContent =
+                    "Subtotal: ₦" + subtotal.toLocaleString();
+
+                itemDiv.appendChild(itemName);
+                itemDiv.appendChild(itemDetails);
+                itemDiv.appendChild(itemPrice);
+
+                checkoutItems.appendChild(itemDiv);
+
+            });
+
+        }
+
+        checkoutTotal.textContent = "₦" + grandTotal.toLocaleString();
+
+
+        // LOAD SAVED DELIVERY ADDRESS
+
+        async function loadCheckoutAddress() {
+
+            try {
+
+                const response = await fetch("/api/delivery", {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message);
+                }
+
+                const details = data.deliveryDetails;
+
+                const addressBox = document.getElementById("checkoutAddress");
+
+                if (!details.recipientName || !details.address) {
+
+                    addressBox.textContent =
+                        "You have not saved your delivery details yet.";
+
+                    document.getElementById("checkoutMessage").innerHTML =
+                        '<a href="delivery-details.html">Add your delivery details</a>';
+
+                    return;
+
+                }
+
+                addressBox.innerHTML = "";
+
+                const addressInfo = [
+                    details.recipientName,
+                    details.deliveryPhone,
+                    details.address,
+                    details.lga,
+                    details.state,
+                    details.landmark
+                ];
+
+                addressInfo.forEach(function(value) {
+
+                    if (value) {
+
+                        const line = document.createElement("p");
+                        line.textContent = value;
+
+                        addressBox.appendChild(line);
+
+                    }
+
+                });
+
+                document.getElementById("addressChoice").style.display = "block";
+
+            } catch (error) {
+
+                document.getElementById("checkoutAddress").textContent =
+                    error.message;
+
+            }
+
+        }
+
+
+        // CONFIRM SAVED ADDRESS
+
+        document.getElementById("sameAddressButton").addEventListener("click", function() {
+
+            if (cart.length === 0) {
+                alert("Your cart is empty.");
+                return;
+            }
+
+            document.getElementById("checkoutMessage").textContent =
+                "Delivery address confirmed.";
+
+            document.getElementById("checkoutMessage").style.color = "green";
+
+            document.getElementById("confirmOrderButton").disabled = false;
+
+            this.textContent = "Address Confirmed ✓";
+
+        });
+
+
+        // PLACE CUSTOMER ORDER
+
+document.getElementById("confirmOrderButton").addEventListener("click", async function() {
+
+    const button = this;
+    const message = document.getElementById("confirmationMessage");
+
+    if (cart.length === 0) {
+        message.textContent = "Your cart is empty.";
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Processing...";
+    message.textContent = "";
+
+    try {
+
+        const response = await fetch("/api/orders", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({
+                items: cart
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Unable to place your order.");
+        }
+
+        localStorage.removeItem("greenbroCart");
+
+        message.style.color = "green";
+        message.textContent = "Your order has been placed successfully!";
+
+        button.textContent = "Order Placed ✓";
+
+        alert("Your GREENBRO AGRO order has been placed successfully!");
+
+        window.location.href = "orders.html";
+
+    } catch (error) {
+
+        message.style.color = "red";
+        message.textContent = error.message;
+
+        button.disabled = false;
+        button.textContent = "Confirm Order";
+
+    }
+
+});
+        loadCheckoutAddress();
+
+    </script>
+
+</body>
+</html>

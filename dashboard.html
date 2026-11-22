@@ -10,51 +10,65 @@
 
 <body class="customer-dashboard">
 
-    <aside class="dashboard-sidebar">
+    
+<aside class="dashboard-sidebar">
 
-        <div class="dashboard-logo">
-            <a href="dashboard.html">
-                <img src="image/logo.png" alt="GREENBRO AGRO">
-            </a>
-        </div>
+    <div class="dashboard-logo">
+        <a href="dashboard.html">
+            <img src="image/logo.png" alt="GREENBRO AGRO">
+        </a>
+    </div>
 
-        <div class="sidebar-menu">
+    <div class="sidebar-menu">
 
-            <p class="menu-heading">MAIN MENU</p>
+        <p class="menu-heading">MAIN MENU</p>
 
-            <a href="dashboard.html" class="sidebar-link active">
-                <span>⌂</span> Home
-            </a>
+        <a href="dashboard.html" class="sidebar-link active">
+            <span>⌂</span> Home
+        </a>
 
-            <a href="orders.html" class="sidebar-link">
-                <span>▣</span> My Orders
-            </a>
+        <a href="wallet.html" class="sidebar-link">
+            <span>▣</span> My Wallet
+        </a>
 
-            <a href="contributions.html" class="sidebar-link">
-                <span>◉</span> My Contributions
-            </a>
+        <a href="shop.html" class="sidebar-link">
+            <span>▤</span> List of Items
+        </a>
 
-            <a href="shop.html" class="sidebar-link">
-                <span>▤</span> List of Items
-            </a>
+        <a href="cart.html" class="sidebar-link">
+    <span>🛒</span> My Cart
+    (<span class="cart-count">0</span>)
+    </a>
 
-            <p class="menu-heading account-heading">ACCOUNT</p>
+        <a href="orders.html" class="sidebar-link">
+            <span>▣</span> My Orders
+        </a>
 
-            <a href="profile.html" class="sidebar-link">
-                <span>♙</span> Me / My Profile
-            </a>
+        <a href="contributions.html" class="sidebar-link">
+            <span>◉</span> My Contributions
+        </a>
 
-            <a href="settings.html" class="sidebar-link">
-                <span>⚙</span> Settings
-            </a>
+        <p class="menu-heading account-heading">ACCOUNT</p>
 
-        </div>
+        <a href="profile.html" class="sidebar-link">
+            <span>♙</span> My Profile
+        </a>
 
-        <button id="logoutButton" class="sidebar-logout">
-            ⇥ Logout
-        </button>
+        <a href="delivery-details.html" class="sidebar-link">
+            <span>⌖</span> Delivery Details
+        </a>
 
-    </aside>
+        <a href="settings.html" class="sidebar-link">
+            <span>⚙</span> Settings
+        </a>
+
+    </div>
+
+    <button id="logoutButton" class="sidebar-logout">
+        ⇥ Logout
+    </button>
+
+</aside>
 
     <main class="dashboard-main">
 
@@ -128,53 +142,77 @@
 
     </main>
 
-    <nav class="mobile-dashboard-nav">
-        <a href="dashboard.html" class="mobile-nav-link active">
-            <span>⌂</span>
-            Home
-        </a>
+   <nav class="mobile-dashboard-nav">
 
-        <a href="orders.html" class="mobile-nav-link">
-            <span>▣</span>
-            Orders
-        </a>
+    <a href="dashboard.html" class="mobile-nav-link active">
+        <span>⌂</span> Home
+    </a>
 
-        <a href="contributions.html" class="mobile-nav-link">
-            <span>◉</span>
-            Contributions
-        </a>
+    <a href="shop.html" class="mobile-nav-link">
+        <span>▤</span> Shop
+    </a>
 
-        <a href="shop.html" class="mobile-nav-link">
-            <span>▤</span>
-            Shop
-        </a>
+    <a href="cart.html" class="mobile-nav-link">
+        <span>🛒</span> Cart
+    </a>
 
-        <a href="profile.html" class="mobile-nav-link">
-            <span>♙</span>
-            Me
-        </a>
-    </nav>
+    <a href="orders.html" class="mobile-nav-link">
+        <span>▣</span> Orders
+    </a>
 
-    <script>
-        const token = localStorage.getItem("greenbroToken");
-        const savedUser = localStorage.getItem("greenbroUser");
+    <a href="profile.html" class="mobile-nav-link">
+        <span>♙</span> Profile
+    </a>
 
-        if (!token || !savedUser) {
-            window.location.href = "login.html";
-        } else {
+</nav>
+
+    
+<script>
+    const token = localStorage.getItem("greenbroToken");
+    const savedUser = localStorage.getItem("greenbroUser");
+
+    if (!token || !savedUser) {
+
+        window.location.href = "login.html";
+
+    } else {
+
+        try {
             const user = JSON.parse(savedUser);
-            const firstName = user.fullName.split(" ")[0];
 
-            document.getElementById("customerName").textContent = firstName;
-            document.getElementById("topCustomerName").textContent = firstName;
-        }
+            if (user.role === "admin") {
 
-        document.getElementById("logoutButton").addEventListener("click", function() {
+                window.location.href = "admin-dashboard.html";
+
+            } else {
+
+                const firstName = user.fullName.split(" ")[0];
+
+                document.getElementById("customerName").textContent = firstName;
+                document.getElementById("topCustomerName").textContent = firstName;
+
+            }
+
+        } catch (error) {
+
             localStorage.removeItem("greenbroToken");
             localStorage.removeItem("greenbroUser");
-            window.location.href = "login.html";
-        });
-    </script>
 
+            window.location.href = "login.html";
+
+        }
+    }
+
+    // CUSTOMER LOGOUT
+    document.getElementById("logoutButton").addEventListener("click", function() {
+
+        localStorage.removeItem("greenbroToken");
+        localStorage.removeItem("greenbroUser");
+
+        window.location.href = "login.html";
+
+    });
+</script>
+<script src="script.js"></script>
 </body>
 </html>

@@ -25,6 +25,38 @@ const userSchema = new mongoose.Schema(
             trim: true
         },
 
+        deliveryDetails: {
+    recipientName: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+    deliveryPhone: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+    state: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+    lga: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+    address: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+    landmark: {
+        type: String,
+        trim: true,
+        default: ""
+    }
+},
         password: {
             type: String,
             required: false

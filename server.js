@@ -6,6 +6,9 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const authRoutes = require("./routes/auth");
+const productRoutes = require("./routes/products");
+const deliveryRoutes = require("./routes/delivery");
+const orderRoutes = require("./routes/orders");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +28,9 @@ app.get("/api", (req, res) => {
 
 // CUSTOMER REGISTRATION AND LOGIN
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/delivery", deliveryRoutes);
+app.use("/api/orders", orderRoutes);
 
 // CONNECT TO MONGODB
 mongoose.connect(process.env.MONGO_URI)
