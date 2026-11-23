@@ -3066,11 +3066,14 @@ button {
     }
 
     .landing-nav-links {
-        order: 3;
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 12px;
+    padding: 10px 0;
+}
 
     .landing-service-grid {
         grid-template-columns: repeat(2, 1fr);
